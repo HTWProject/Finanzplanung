@@ -7,4 +7,18 @@
     <string name="txt_logo">Finanzplanung</string>
     <string name="bt_vergessen">Vergessen</string>
     <string name="bt_registrierung">Registrierung</string>
+    <string name="title_activity_activity_registration">Registration</string>
+    <string name="name">Name</string>
+    <string name="email">eMail</string>
+    <string name="passwort">Passwort</string>
+    <string name="passwortValidation">Passwort wiederhollen</string>
+    <string name="bt_ok">OK</string>
+    <string name="title_activity_activity_home">ActivityHome</string>
+    <string name="Gruppenverwaltung">Gruppenverwaltung</string>
+    <string name="Settings">Einstellungen</string>
+    <string name="title_activity_activity_settings">ActivitySettings</string>
+    <string name="SyncOverLTE">Sync over LTE</string>
+    <string name="Server">Server</string>
+    <string name="newPasswort">Neues Passwort</string>
+    <string name="bt_Save">Save</string>
 </resources>

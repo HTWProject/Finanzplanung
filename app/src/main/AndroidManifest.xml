@@ -16,6 +16,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ActivityRegistration"
+            android:label="@string/title_activity_activity_registration" >
+        </activity>
+        <activity
+            android:name=".ActivityHome"
+            android:label="@string/title_activity_activity_home"
+            android:parentActivityName=".ActivityLogin" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.htw.finanzplanung.ActivityLogin" />
+        </activity>
+        <activity
+            android:name=".ActivitySettings"
+            android:label="@string/title_activity_activity_settings" >
+        </activity>
     </application>
 
 </manifest>
