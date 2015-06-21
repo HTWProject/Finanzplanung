@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.1">
+  <zoom_level>11</zoom_level>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>814</x>
+      <y>308</y>
+      <w>110</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>*Gruppen*
+--
+ID:
+Name:
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>440</x>
+      <y>44</y>
+      <w>187</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*User*
+--
+ID:
+Namen:
+Email:
+Passwort:
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>462</x>
+      <y>308</y>
+      <w>176</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>*Ausgabe*
+--
+ID:
+Was:
+Datum:
+€ :</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Class</type>
+    <coordinates>
+      <x>187</x>
+      <y>187</y>
+      <w>187</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>*Settings*
+--
+ID:
+Server:
+Mobile Sync :</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>594</x>
+      <y>44</y>
+      <w>329</w>
+      <h>285</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..*
+m2=1    Firma </panel_attributes>
+    <additional_attributes>308;264;308;33;33;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>462</x>
+      <y>121</y>
+      <w>54</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..*
+m2=1
+</panel_attributes>
+    <additional_attributes>33;187;33;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>528</x>
+      <y>121</y>
+      <w>54</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..*
+m2=1
+</panel_attributes>
+    <additional_attributes>33;187;33;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>253</x>
+      <y>44</y>
+      <w>208</w>
+      <h>164</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..*
+m2=1
+</panel_attributes>
+    <additional_attributes>33;143;33;33;187;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>605</x>
+      <y>319</y>
+      <w>230</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=0..*    gehört zu
+</panel_attributes>
+    <additional_attributes>209;33;143;33;33;33</additional_attributes>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Relation</type>
+    <coordinates>
+      <x>594</x>
+      <y>99</y>
+      <w>263</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1..*
+m2=1    Admin
+</panel_attributes>
+    <additional_attributes>242;209;242;33;33;33</additional_attributes>
+  </element>
+</diagram>
