@@ -32,6 +32,18 @@
             android:name=".ActivitySettings"
             android:label="@string/title_activity_activity_settings" >
         </activity>
+        <activity
+            android:name=".ActivityGruppenverwaltung"
+            android:label="@string/title_activity_activity_gruppenverwaltung" >
+        </activity>
+        <activity
+            android:name=".ActivityGruppenmitglieder"
+            android:label="@string/title_activity_activity_gruppenmitglieder" >
+        </activity>
+        <activity
+            android:name=".ActivityFinanzen"
+            android:label="@string/title_activity_activity_finanzen" >
+        </activity>
     </application>
 
 </manifest>

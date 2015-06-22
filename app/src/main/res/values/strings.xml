@@ -21,4 +21,11 @@
     <string name="Server">Server</string>
     <string name="newPasswort">Neues Passwort</string>
     <string name="bt_Save">Save</string>
+    <string name="title_activity_activity_gruppenverwaltung">ActivityGruppenverwaltung</string>
+    <string name="bt_createGruppe">Gruppe erstellen</string>
+    <string name="title_activity_activity_gruppenmitglieder">ActivityGruppenmitglieder</string>
+    <string name="bt_addMitglied">Mitglied hinzufügen</string>
+    <string name="title_activity_activity_finanzen">ActivityFinanzen</string>
+    <string name="bt_addBetrag">+</string>
+    <string name="gesamtbetrag">Gesamt</string>
 </resources>
