@@ -1,20 +1,29 @@
 package com.htw.finanzplanung;
 
 public class Mitglied{
-    private Integer id;
+    private Integer dbId;
     private String name;
 
-    public Mitglied(Integer id, String name){
-        this.id = id;
-        this.name = name;
+    public Mitglied(Integer dbID, String name){
+        this.dbId = (dbID==null?-1:dbID);
+        this.name = (name==null?"":name);
 
     }
-
-    public Integer getID(){
-        return id;
+    public Integer getDbId() {
+        return dbId;
     }
-    public String getWas(){
+
+    public boolean isDbIdUnknown() {
+        return dbId == -1;
+    }
+
+    public String getName(){
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + dbId + ", " + name + ") ";
     }
 
 }

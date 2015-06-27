@@ -1,12 +1,85 @@
 package com.htw.finanzplanung;
 
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import java.util.ArrayList;
 import java.sql.Date;
 
 
-public class Data_Access {
+public class Data_Access extends SQLiteOpenHelper {
 
+    private static final String DATABASE_NAME = "Finanzplanung.sql";
+
+
+    public Data_Access(Context context) {
+        super(context, DATABASE_NAME, null, 1);
+        SQLiteDatabase db = this.getWritableDatabase();
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("PRAGMA foreign_keys = OFF;");
+        db.execSQL("CREATE TABLE IF NOT EXISTS user " +
+                        "(" +
+                            "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            "  name TEXT," +
+                            "  email TEXT UNIQUE," +
+                            "  passwort TEXT NOT NULL" +
+                        ")"
+        );
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS gruppe " +
+                        "(" +
+                        "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "  name TEXT," +
+                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
+                        ")"
+        );
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS settings " +
+                        "(" +
+                        "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "  server TEXT," +
+                        "  mobile_sync NUMERIC," +
+                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
+                        ")"
+        );
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS ausgabe " +
+                        "(" +
+                        "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "  was TEXT," +
+                        "  datum NUMERIC" +
+                        "  bertrag REAL," +
+                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
+                        "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE" +
+                        ")"
+        );
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS user_ist_mitglied_in_gruppe " +
+                        "(" +
+                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
+                        "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
+                        "  PRIMARY KEY(user_id,gruppe_id)" +
+                        ")"
+        );
+        db.execSQL("PRAGMA foreign_keys = ON;");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("PRAGMA foreign_keys = OFF;");
+        db.execSQL("DROP TABLE IF EXISTS user");
+        db.execSQL("DROP TABLE IF EXISTS ausgabe");
+        db.execSQL("DROP TABLE IF EXISTS gruppe");
+        db.execSQL("DROP TABLE IF EXISTS settings");
+        db.execSQL("DROP TABLE IF EXISTS user_ist_mitglied_in_gruppe");
+        db.execSQL("PRAGMA foreign_keys = ON;");
+        onCreate(db);
+    }
 
     //GruppenVerwalten
 
@@ -124,5 +197,6 @@ public class Data_Access {
         return 0;
 
     }
+
 
 }

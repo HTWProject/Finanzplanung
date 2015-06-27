@@ -148,7 +148,7 @@
   <element>
     <type>com.baselet.element.old.element.EER_Rel_Diamond</type>
     <coordinates>
-      <x>624</x>
+      <x>600</x>
       <y>448</y>
       <w>128</w>
       <h>40</h>
@@ -170,7 +170,7 @@
   <element>
     <type>com.baselet.element.old.element.EER_Rel_Diamond</type>
     <coordinates>
-      <x>368</x>
+      <x>352</x>
       <y>424</y>
       <w>112</w>
       <h>40</h>
@@ -315,7 +315,7 @@ m2=1
     <panel_attributes>lt=-
 m2=1
 </panel_attributes>
-    <additional_attributes>24;128;240;128;240;24</additional_attributes>
+    <additional_attributes>24;128;24;96;240;24</additional_attributes>
   </element>
   <element>
     <type>com.baselet.element.old.element.Relation</type>
@@ -404,7 +404,7 @@ m1=   n
       <w>96</w>
       <h>32</h>
     </coordinates>
-    <panel_attributes>Mobile Sync</panel_attributes>
+    <panel_attributes>Mobile_Sync</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
