@@ -103,4 +103,26 @@ public class Data_Access {
         return 0;
     }
 
+    //Settings
+    public int setNewPasswort(String newpasswort, String oldpasswort, String user_id){
+        return 0;
+
+    }
+    public int setNewEmail(String newEmail, String passwort, String user_id){
+        return 0;
+
+    }
+    public int setNewName(String newName, String passwort, String user_id){
+        return 0;
+
+    }
+    public int setNewServer(String newServer, String passwort, String user_id){
+        return 0;
+
+    }
+    public int toggleOverMobileSync(Boolean MobileSync, String passwort, String user_id){
+        return 0;
+
+    }
+
 }
