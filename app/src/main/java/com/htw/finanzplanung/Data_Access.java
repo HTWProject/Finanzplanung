@@ -1,6 +1,7 @@
 package com.htw.finanzplanung;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -51,8 +52,8 @@ public class Data_Access extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS ausgabe " +
                         "(" +
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "  was TEXT," +
                         "  datum TEXT" +
+                        "  was TEXT," +
                         "  bertrag REAL," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
                         "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE" +
@@ -85,9 +86,20 @@ public class Data_Access extends SQLiteOpenHelper {
 
     public ArrayList<Gruppe> getMeineGruppen(Integer user_id) {
         ArrayList<Gruppe> Gruppen = new ArrayList<>();
-        //    for(){
-        //        Gruppe.add(new Gruppe());
-        //    };
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        Cursor c = db.rawQuery("SELECT _id, name FROM gruppe  WHERE user_id = " + user_id + " ", null);
+
+
+        if(c.moveToFirst()){
+            do{
+                Gruppen.add(new Gruppe(c.getInt(0), c.getString(1)));
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
         return Gruppen;
     }
 
@@ -98,13 +110,27 @@ public class Data_Access extends SQLiteOpenHelper {
     public int addGruppe(Integer user_id,String gruppenname){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("INSERT INTO gruppe (name, user_id) VALUES ('"+gruppenname+"' , "+user_id+");");
-
+        db.execSQL("INSERT INTO gruppe (name, user_id) VALUES ('" + gruppenname + "' , " + user_id + ");");
+        db.close();
         return 0;
     }
 
     public Integer getGruppenMasterID(Integer gruppen_id){
-        return 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Integer user_id = -1;
+
+        Cursor c = db.rawQuery("SELECT user_id FROM gruppe  WHERE _id = " + gruppen_id + " ", null);
+
+
+        if(c.moveToFirst()){
+            do{
+                user_id = c.getInt(0);
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return user_id;
     }
 
 
@@ -121,32 +147,69 @@ public class Data_Access extends SQLiteOpenHelper {
                 "  " +user_id       +" , " +
                 "  " +gruppen_id    +"   " +
                 ");");
+        db.close();
         return 0;
     }
 
     public Float getGruppenGesamtbetrag(String startdatum, String enddatum, Integer gruppen_id){
-        return null;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery("SELECT sum(geldbetrag) AS Summe FROM ausgabe WHERE gruppe_id = " + gruppen_id +" AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null);
+        Float gesamtgeldbetrag = 0f;
+        if(c.moveToFirst()){
+            gesamtgeldbetrag = c.getFloat(0);
+        }
+        c.close();
+        db.close();
+
+        return gesamtgeldbetrag;
     }
 
     public Float getUserGesamtbetrag(String startdatum, String enddatum, Integer gruppen_id, Integer user_id){
-        return null;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery("SELECT sum(ausgabe.geldbetrag) AS Summe FROM ausgabe INNER JOIN user_ist_mitglied_in_gruppe ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null);
+        Float gesamtgeldbetrag = 0f;
+        if(c.moveToFirst()){
+            gesamtgeldbetrag = c.getFloat(0);
+        }
+        c.close();
+        db.close();
+
+        return gesamtgeldbetrag;
     }
 
     public ArrayList<Geldausgabe> getUserGeldausgaben(Integer gruppen_id, Integer user_id){
         ArrayList<Geldausgabe> Ausgaben = new ArrayList<>();
-    //    for(){
-    //        Ausgaben.add(new Geldausgabe());
-    //    };
+        SQLiteDatabase db = this.getWritableDatabase();
 
-        return(Ausgaben);
+        Cursor c = db.rawQuery("SELECT ausgabe.* FROM ausgabe INNER JOIN user_ist_mitglied_in_gruppe ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null);
+
+        if(c.moveToFirst()){
+            do{
+                Ausgaben.add(new Geldausgabe(c.getInt(0), c.getString(1),c.getString(2),c.getFloat(3)));
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
+        return Ausgaben;
     }
 
     //Gruppenmitglieder
-    public ArrayList<Mitglied> getGruppenMitglieder(){
+    public ArrayList<Mitglied> getGruppenMitglieder(Integer gruppe_id){
         ArrayList<Mitglied> Mitglieder = new ArrayList<>();
-        //    for(){
-        //        Mitglieder.add(new Gruppe());
-        //    };
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery("SELECT user._id, user.name FROM user INNER JOIN user_ist_mitglied_in_gruppe ON user._id = user_ist_mitglied_in_gruppe.user_id  WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppe_id + " ", null);
+
+        if(c.moveToFirst()){
+            do{
+                Mitglieder.add(new Mitglied(c.getInt(0), c.getString(1)));
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
         return Mitglieder;
     }
 
@@ -157,22 +220,33 @@ public class Data_Access extends SQLiteOpenHelper {
     public int addGruppenMitglied(Integer user_id, Integer gruppen_id, Integer mitglied_id){
         SQLiteDatabase db = this.getWritableDatabase();
 
-
         //datum TEXT as strings ("YYYY-MM-DD").
         db.execSQL("INSERT INTO user_ist_mitglied_in_gruppe ( user_id, gruppe_id) " +
                 "VALUES (" +
                 "  " +user_id       +" , " +
                 "  " +gruppen_id    +"   " +
                 ");");
+        db.close();
         return 0;
     }
 
     //Home
     public ArrayList<Gruppe> getGruppen(Integer user_id){
         ArrayList<Gruppe> Gruppen = new ArrayList<>();
-        //    for(){
-        //        Gruppe.add(new Gruppe());
-        //    };
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        Cursor c = db.rawQuery("SELECT gruppe._id, gruppe.name FROM gruppe INNER JOIN user_ist_mitglied_in_gruppe ON gruppe._id = user_ist_mitglied_in_gruppe.gruppe_id   WHERE user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null);
+
+
+        if(c.moveToFirst()){
+            do{
+                Gruppen.add(new Gruppe(c.getInt(0), c.getString(1)));
+            }while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+
         return Gruppen;
     }
 
@@ -207,7 +281,7 @@ public class Data_Access extends SQLiteOpenHelper {
                 " '" +email           +"', " +
                 " '" +passwort        +"' , " +
                 ");");
-
+        db.close();
         return 0;
     }
 
