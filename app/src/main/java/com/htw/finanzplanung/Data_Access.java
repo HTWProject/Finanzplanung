@@ -1,22 +1,21 @@
 package com.htw.finanzplanung;
 
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
-import java.sql.Date;
 
+//datum TEXT as strings ("YYYY-MM-DD").
 
 public class Data_Access extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "Finanzplanung.sql";
+    private static final String DATABASE_NAME = "Finanzplanung.sqlite";
 
 
     public Data_Access(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        SQLiteDatabase db = this.getWritableDatabase();
+        //SQLiteDatabase db = this.getWritableDatabase();
     }
 
     @Override
@@ -28,6 +27,7 @@ public class Data_Access extends SQLiteOpenHelper {
                             "  name TEXT," +
                             "  email TEXT UNIQUE," +
                             "  passwort TEXT NOT NULL" +
+                            "  activationcode INTEGER DEFAULT 0" +
                         ")"
         );
 
@@ -52,7 +52,7 @@ public class Data_Access extends SQLiteOpenHelper {
                         "(" +
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "  was TEXT," +
-                        "  datum NUMERIC" +
+                        "  datum TEXT" +
                         "  bertrag REAL," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
                         "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE" +
@@ -96,6 +96,10 @@ public class Data_Access extends SQLiteOpenHelper {
     }
 
     public int addGruppe(Integer user_id,String gruppenname){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("INSERT INTO gruppe (name, user_id) VALUES ('"+gruppenname+"' , "+user_id+");");
+
         return 0;
     }
 
@@ -105,15 +109,26 @@ public class Data_Access extends SQLiteOpenHelper {
 
 
     //Finanzen
-    public int addGeldausgabe(Date datum,String was, Float Betrag, Integer user_id, Integer gruppen_id){
+    public int addGeldausgabe(String datum,String was, Float betrag, Integer user_id, Integer gruppen_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //datum TEXT as strings ("YYYY-MM-DD").
+        db.execSQL("INSERT INTO ausgabe (was, ausgabe, betrag, user_id, gruppe_id) " +
+                "VALUES (" +
+                " '" +datum         +"', " +
+                " '" +was           +"', " +
+                "  " +betrag        +" , " +
+                "  " +user_id       +" , " +
+                "  " +gruppen_id    +"   " +
+                ");");
         return 0;
     }
 
-    public Float getGruppenGesamtbetrag(Date startdatum, Date enddatum, Integer gruppen_id){
+    public Float getGruppenGesamtbetrag(String startdatum, String enddatum, Integer gruppen_id){
         return null;
     }
 
-    public Float getUserGesamtbetrag(Date startdatum, Date enddatum, Integer gruppen_id, Integer user_id){
+    public Float getUserGesamtbetrag(String startdatum, String enddatum, Integer gruppen_id, Integer user_id){
         return null;
     }
 
@@ -140,6 +155,15 @@ public class Data_Access extends SQLiteOpenHelper {
     }
 
     public int addGruppenMitglied(Integer user_id, Integer gruppen_id, Integer mitglied_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        //datum TEXT as strings ("YYYY-MM-DD").
+        db.execSQL("INSERT INTO user_ist_mitglied_in_gruppe ( user_id, gruppe_id) " +
+                "VALUES (" +
+                "  " +user_id       +" , " +
+                "  " +gruppen_id    +"   " +
+                ");");
         return 0;
     }
 
@@ -173,6 +197,17 @@ public class Data_Access extends SQLiteOpenHelper {
 
     //Registration
     public int addUser(String name, String email, String passwort){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //datum TEXT as strings ("YYYY-MM-DD").
+        db.execSQL("INSERT INTO user (name, email, passwort) " +
+                "VALUES (" +
+                " '" +name            +"', " +
+                " '" +email           +"', " +
+                " '" +passwort        +"' , " +
+                ");");
+
         return 0;
     }
 
@@ -193,8 +228,8 @@ public class Data_Access extends SQLiteOpenHelper {
         return 0;
 
     }
-    public int toggleOverMobileSync(Boolean MobileSync, String passwort, String user_id){
-        return 0;
+    public Boolean toggleOverMobileSync(Boolean MobileSync, String passwort, String user_id){
+        return true;
 
     }
 
