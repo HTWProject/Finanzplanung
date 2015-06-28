@@ -141,11 +141,11 @@ public class Data_Access extends SQLiteOpenHelper {
         //datum TEXT as strings ("YYYY-MM-DD").
         db.execSQL("INSERT INTO ausgabe (was, ausgabe, betrag, user_id, gruppe_id) " +
                 "VALUES (" +
-                " '" +datum         +"', " +
-                " '" +was           +"', " +
-                "  " +betrag        +" , " +
-                "  " +user_id       +" , " +
-                "  " +gruppen_id    +"   " +
+                " '" + datum + "', " +
+                " '" + was + "', " +
+                "  " + betrag + " , " +
+                "  " + user_id + " , " +
+                "  " + gruppen_id + "   " +
                 ");");
         db.close();
         return 0;
@@ -154,7 +154,13 @@ public class Data_Access extends SQLiteOpenHelper {
     public Float getGruppenGesamtbetrag(String startdatum, String enddatum, Integer gruppen_id){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor c = db.rawQuery("SELECT sum(geldbetrag) AS Summe FROM ausgabe WHERE gruppe_id = " + gruppen_id +" AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null);
+        Cursor c = db.rawQuery(
+                "SELECT sum(geldbetrag) AS Summe " +
+                "FROM ausgabe " +
+                "WHERE gruppe_id = " + gruppen_id +" " +
+                        "AND ausgabe.datum BETWEEN '" + startdatum + "' " +
+                        "AND '" + enddatum + "' ", null
+        );
         Float gesamtgeldbetrag = 0f;
         if(c.moveToFirst()){
             gesamtgeldbetrag = c.getFloat(0);
@@ -168,7 +174,15 @@ public class Data_Access extends SQLiteOpenHelper {
     public Float getUserGesamtbetrag(String startdatum, String enddatum, Integer gruppen_id, Integer user_id){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor c = db.rawQuery("SELECT sum(ausgabe.geldbetrag) AS Summe FROM ausgabe INNER JOIN user_ist_mitglied_in_gruppe ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null);
+        Cursor c = db.rawQuery(
+                "SELECT sum(ausgabe.geldbetrag) AS Summe " +
+                "FROM ausgabe " +
+                "INNER JOIN user_ist_mitglied_in_gruppe " +
+                        "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
+                "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
+                        "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
+                        "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null
+        );
         Float gesamtgeldbetrag = 0f;
         if(c.moveToFirst()){
             gesamtgeldbetrag = c.getFloat(0);
@@ -183,7 +197,14 @@ public class Data_Access extends SQLiteOpenHelper {
         ArrayList<Geldausgabe> Ausgaben = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor c = db.rawQuery("SELECT ausgabe.* FROM ausgabe INNER JOIN user_ist_mitglied_in_gruppe ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null);
+        Cursor c = db.rawQuery(
+                "SELECT ausgabe.* " +
+                "FROM ausgabe " +
+                "INNER JOIN user_ist_mitglied_in_gruppe " +
+                        "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
+                "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
+                        "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null
+        );
 
         if(c.moveToFirst()){
             do{
@@ -201,7 +222,13 @@ public class Data_Access extends SQLiteOpenHelper {
         ArrayList<Mitglied> Mitglieder = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor c = db.rawQuery("SELECT user._id, user.name FROM user INNER JOIN user_ist_mitglied_in_gruppe ON user._id = user_ist_mitglied_in_gruppe.user_id  WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppe_id + " ", null);
+        Cursor c = db.rawQuery(
+                "SELECT user._id, user.name " +
+                "FROM user " +
+                "INNER JOIN user_ist_mitglied_in_gruppe " +
+                        "ON user._id = user_ist_mitglied_in_gruppe.user_id  " +
+                "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppe_id + " ", null
+        );
 
         if(c.moveToFirst()){
             do{
@@ -236,7 +263,13 @@ public class Data_Access extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
 
-        Cursor c = db.rawQuery("SELECT gruppe._id, gruppe.name FROM gruppe INNER JOIN user_ist_mitglied_in_gruppe ON gruppe._id = user_ist_mitglied_in_gruppe.gruppe_id   WHERE user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null);
+        Cursor c = db.rawQuery(
+                "SELECT gruppe._id, gruppe.name " +
+                "FROM gruppe " +
+                "INNER JOIN user_ist_mitglied_in_gruppe " +
+                        "ON gruppe._id = user_ist_mitglied_in_gruppe.gruppe_id   " +
+                "WHERE user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null
+        );
 
 
         if(c.moveToFirst()){
@@ -290,10 +323,6 @@ public class Data_Access extends SQLiteOpenHelper {
         return 0;
 
     }
-    public int setNewEmail(String newEmail, String passwort, String user_id){
-        return 0;
-
-    }
     public int setNewName(String newName, String passwort, String user_id){
         return 0;
 
@@ -302,7 +331,11 @@ public class Data_Access extends SQLiteOpenHelper {
         return 0;
 
     }
-    public Boolean toggleOverMobileSync(Boolean MobileSync, String passwort, String user_id){
+    public Boolean setMobileSync(Boolean MobileSync, String passwort, String user_id){
+        return true;
+
+    }
+    public Boolean getMobileSyncStatus(String user_id){
         return true;
 
     }
