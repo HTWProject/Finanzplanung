@@ -43,7 +43,7 @@ public class Data_Access extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS settings " +
                         "(" +
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "  server TEXT DEFAULT 'http://fomenko.eu/'," +
+                        "  server TEXT DEFAULT 'http://fomenko.eu/Finanzplanung/'," +
                         "  mobile_sync INTEGER DEFAULT 0," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
                         ")"
