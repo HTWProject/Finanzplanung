@@ -248,7 +248,7 @@ public class Data_Access extends SQLiteOpenHelper {
     public int deleteMitglied(Integer user_id, Integer gruppen_id, Integer mitglied_id){
         SQLiteDatabase db = this.getWritableDatabase();
         Integer zwisch = -1;
-        if(user_id.equals(getGruppenMasterID(gruppen_id))){
+        if(user_id.intValue() == getGruppenMasterID(gruppen_id).intValue()){
             db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = "+ mitglied_id +" AND gruppen_id = " + gruppen_id + ");");
             zwisch = 0;
         }
