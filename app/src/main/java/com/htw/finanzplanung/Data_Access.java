@@ -43,8 +43,8 @@ public class Data_Access extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS settings " +
                         "(" +
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "  server TEXT," +
-                        "  mobile_sync INTEGER," +
+                        "  server TEXT DEFAULT 'http://fomenko.eu/'," +
+                        "  mobile_sync INTEGER DEFAULT 0," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
                         ")"
         );
@@ -359,10 +359,11 @@ public class Data_Access extends SQLiteOpenHelper {
             c.close();
             db.close();
             return true;
+        }else {
+            c.close();
+            db.close();
+            return false;
         }
-        c.close();
-        db.close();
-        return false;
     }
 
     public int setNewName(String newName, String passwort, Integer user_id){
