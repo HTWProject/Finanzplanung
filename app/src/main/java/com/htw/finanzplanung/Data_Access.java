@@ -44,7 +44,7 @@ public class Data_Access extends SQLiteOpenHelper {
                         "(" +
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "  server TEXT," +
-                        "  mobile_sync NUMERIC," +
+                        "  mobile_sync INTEGER," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
                         ")"
         );
@@ -104,6 +104,10 @@ public class Data_Access extends SQLiteOpenHelper {
     }
 
     public int deleteGruppe(Integer user_id, Integer gruppen_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM gruppe WHERE _id = " + gruppen_id + ");");
+        db.close();
+
         return 0;
     }
 
@@ -176,10 +180,10 @@ public class Data_Access extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(
                 "SELECT sum(ausgabe.geldbetrag) AS Summe " +
-                "FROM ausgabe " +
-                "INNER JOIN user_ist_mitglied_in_gruppe " +
+                        "FROM ausgabe " +
+                        "INNER JOIN user_ist_mitglied_in_gruppe " +
                         "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
-                "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
+                        "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
                         "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
                         "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null
         );
@@ -224,10 +228,10 @@ public class Data_Access extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(
                 "SELECT user._id, user.name " +
-                "FROM user " +
-                "INNER JOIN user_ist_mitglied_in_gruppe " +
+                        "FROM user " +
+                        "INNER JOIN user_ist_mitglied_in_gruppe " +
                         "ON user._id = user_ist_mitglied_in_gruppe.user_id  " +
-                "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppe_id + " ", null
+                        "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppe_id + " ", null
         );
 
         if(c.moveToFirst()){
@@ -240,8 +244,17 @@ public class Data_Access extends SQLiteOpenHelper {
         return Mitglieder;
     }
 
+    //gibt 0 zurück wenn alles gut lief, und gibt -1 zurück wenn der user nicht der eigentümer der Gruppe ist
     public int deleteMitglied(Integer user_id, Integer gruppen_id, Integer mitglied_id){
-        return 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Integer zwisch = -1;
+        if(user_id.equals(getGruppenMasterID(gruppen_id))){
+            db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = "+ mitglied_id +" AND gruppen_id = " + gruppen_id + ");");
+            zwisch = 0;
+        }
+
+        db.close();
+        return zwisch;
     }
 
     public int addGruppenMitglied(Integer user_id, Integer gruppen_id, Integer mitglied_id){
@@ -283,22 +296,24 @@ public class Data_Access extends SQLiteOpenHelper {
         return Gruppen;
     }
 
-    public int verlasseGruppe(Integer user_id, Integer gruppen_id){
-        if(user_id.equals(getGruppenMasterID(gruppen_id))){
+    public void verlasseGruppe(Integer user_id, Integer gruppen_id){
 
-            return 1;
-        }else {
-            return 0;
-        }
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = "+ user_id +" AND gruppen_id = " + gruppen_id + ");");
+
+        db.close();
     }
 
     //Startseite
     public Mitglied Login(String email,String passwort){
+
         return null;
     }
 
     public int sendPasswortToEmail(String email){
+
+
         return 0;
     }
 
@@ -319,24 +334,84 @@ public class Data_Access extends SQLiteOpenHelper {
     }
 
     //Settings
-    public int setNewPasswort(String newpasswort, String oldpasswort, String user_id){
+    public int setNewPasswort(String newpasswort, String oldpasswort, Integer user_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if(validation(user_id,oldpasswort)){
+            db.execSQL("UPDATE user SET password = '"+ newpasswort +"' WHERE _id = "+ user_id +";");
+        }
+
+        db.close();
         return 0;
 
     }
-    public int setNewName(String newName, String passwort, String user_id){
+    public Boolean validation(Integer user_id, String passwort){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery(
+                "SELECT * " +
+                        "FROM user " +
+                        "WHERE user_id = " + user_id + " " +
+                        " AND passwort = " + passwort + " ", null
+        );
+
+        if(c.moveToFirst()){
+            c.close();
+            db.close();
+            return true;
+        }
+        c.close();
+        db.close();
+        return false;
+    }
+
+    public int setNewName(String newName, String passwort, Integer user_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if(validation(user_id,passwort)){
+            db.execSQL("UPDATE user SET name = '"+ newName +"' WHERE _id = "+ user_id +";");
+        }
+
+        db.close();
         return 0;
 
     }
-    public int setNewServer(String newServer, String passwort, String user_id){
+    public int setNewServer(String newServer, String passwort, Integer user_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if(validation(user_id,passwort)){
+            db.execSQL("UPDATE setting SET server = '"+ newServer +"' WHERE user_id = "+ user_id +";");
+        }
+
+        db.close();
         return 0;
 
     }
-    public Boolean setMobileSync(Boolean MobileSync, String passwort, String user_id){
-        return true;
+    public void setMobileSync(Boolean mobileSync, String passwort, Integer user_id){
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        if(validation(user_id,passwort)){
+            db.execSQL("UPDATE setting SET mobile_sync = "+ (mobileSync?1:0) +" WHERE user_id = "+ user_id +";");
+        }
+        db.close();
     }
-    public Boolean getMobileSyncStatus(String user_id){
-        return true;
+    public Boolean getMobileSyncStatus(Integer user_id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Boolean zwisch = false;
+        Cursor c = db.rawQuery(
+                "SELECT mobile_sync " +
+                        "FROM settings " +
+                        "WHERE user_id = " + user_id + " ", null
+        );
+
+        if(c.moveToFirst()){
+            zwisch = c.getInt(0) == 1;
+        }
+        c.close();
+        db.close();
+        return zwisch;
+
 
     }
 
