@@ -4,7 +4,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.htw.finanzplanung.ActivityGruppenverwaltung">
+    tools:context="com.htw.finanzplanung.ActivityGruppenverwaltung"
+    android:background="#000000">
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,7 +23,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/gruppenname"
                 android:layout_weight="0.81"
-                android:inputType="text" />
+                android:inputType="text"
+                android:backgroundTint="#808080"
+                android:textColor="#808080"/>
 
             <Button
                 android:layout_width="wrap_content"
@@ -35,7 +38,8 @@
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listViewGruppen" />
+            android:id="@+id/listViewGruppen"
+            android:textColor="#808080"/>
 
     </LinearLayout>
 </RelativeLayout>
