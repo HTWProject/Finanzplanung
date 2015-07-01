@@ -398,12 +398,12 @@ public class Data_Access extends SQLiteOpenHelper{
                     contactList.add(contact);
           */
                 } catch (JSONException e) {
-                jsonStr = "hallo1"+stripHtml(jsonStr);
+                jsonStr = "ERROR: "+stripHtml(jsonStr);
                 e.printStackTrace();
             }
         } else {
             Log.e("ServiceHandler", "Couldn't get any data from the url");
-            jsonStr = "Couldn't get any data from the url";
+            jsonStr = "ERROR: NO INTERNET CONNECTION";
         }
 
         return jsonStr;

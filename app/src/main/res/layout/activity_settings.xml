@@ -50,14 +50,6 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="41dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/email"
-                    android:id="@+id/textView10"
-                    android:textColor="#808080"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="74dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/name"
@@ -99,15 +91,6 @@
                     android:inputType="textPassword"
                     android:ems="10"
                     android:id="@+id/passwort"
-                    android:textColor="#808080"
-                    android:backgroundTint="#808080"/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:ems="10"
-                    android:id="@+id/email"
                     android:textColor="#808080"
                     android:backgroundTint="#808080"/>
 
