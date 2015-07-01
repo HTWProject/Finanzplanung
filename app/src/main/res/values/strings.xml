@@ -17,7 +17,7 @@
     <string name="Gruppenverwaltung">Gruppenverwaltung</string>
     <string name="Settings">Einstellungen</string>
     <string name="title_activity_activity_settings">ActivitySettings</string>
-    <string name="SyncOverLTE">Sync over LTE</string>
+    <string name="SyncOverLTE">Mobile Sync</string>
     <string name="Server">Server</string>
     <string name="newPasswort">Neues Passwort</string>
     <string name="bt_Save">Save</string>
