@@ -1,5 +1,7 @@
 package com.htw.finanzplanung;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +18,9 @@ public class ActivityRegistration extends AppCompatActivity {
     EditText inputEmail;
     EditText inputPasswort;
     EditText inputPasswortValidierung;
+    Data_Access dataAccess = new Data_Access(this);
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +28,26 @@ public class ActivityRegistration extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         // Zuweisung der XML Objekte an unsere Variabeln
+        inputName = (EditText) findViewById(R.id.name);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPasswort = (EditText) findViewById(R.id.passwort);
         inputPasswortValidierung = (EditText) findViewById(R.id.PasswortValidation);
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
         Button okButton = (Button) findViewById(R.id.bt_OK);
 
         okButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
+                alertDialog.setTitle("Registration");
+                alertDialog.setMessage(dataAccess.registration( inputName.getText().toString(),inputEmail.getText().toString(),inputPasswort.getText().toString()));
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+// here you can add functions
+                    }
+                });
 
+                alertDialog.show();
 
             }
         });

@@ -4,12 +4,26 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.DocumentsContract;
+import android.text.Html;
+import android.util.Log;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+//import static com.htw.finanzplanung.DBNames.*;
 
 //datum TEXT as strings ("YYYY-MM-DD").
 
-public class Data_Access extends SQLiteOpenHelper {
+public class Data_Access extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "Finanzplanung.sqlite";
 
@@ -29,6 +43,16 @@ public class Data_Access extends SQLiteOpenHelper {
                             "  email TEXT UNIQUE," +
                             "  passwort TEXT NOT NULL" +
                             "  activationcode INTEGER DEFAULT 0" +
+                        ")"
+        );
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS loginstate " +
+                        "(" +
+                        "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "  name TEXT," +
+                        "  email TEXT UNIQUE," +
+                        "  passwort TEXT NOT NULL" +
+                        "  activationcode INTEGER DEFAULT 0" +
                         ")"
         );
 
@@ -54,7 +78,7 @@ public class Data_Access extends SQLiteOpenHelper {
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "  datum TEXT" +
                         "  was TEXT," +
-                        "  bertrag REAL," +
+                        "  betrag REAL," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
                         "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE" +
                         ")"
@@ -143,7 +167,7 @@ public class Data_Access extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         //datum TEXT as strings ("YYYY-MM-DD").
-        db.execSQL("INSERT INTO ausgabe (was, ausgabe, betrag, user_id, gruppe_id) " +
+        db.execSQL("INSERT INTO ausgabe  (datum, was, betrag, user_id, gruppe_id) " +
                 "VALUES (" +
                 " '" + datum + "', " +
                 " '" + was + "', " +
@@ -162,8 +186,7 @@ public class Data_Access extends SQLiteOpenHelper {
                 "SELECT sum(geldbetrag) AS Summe " +
                 "FROM ausgabe " +
                 "WHERE gruppe_id = " + gruppen_id +" " +
-                        "AND ausgabe.datum BETWEEN '" + startdatum + "' " +
-                        "AND '" + enddatum + "' ", null
+                        "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null
         );
         Float gesamtgeldbetrag = 0f;
         if(c.moveToFirst()){
@@ -263,8 +286,8 @@ public class Data_Access extends SQLiteOpenHelper {
         //datum TEXT as strings ("YYYY-MM-DD").
         db.execSQL("INSERT INTO user_ist_mitglied_in_gruppe ( user_id, gruppe_id) " +
                 "VALUES (" +
-                "  " +user_id       +" , " +
-                "  " +gruppen_id    +"   " +
+                "  " + user_id + " , " +
+                "  " + gruppen_id + "   " +
                 ");");
         db.close();
         return 0;
@@ -278,10 +301,10 @@ public class Data_Access extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(
                 "SELECT gruppe._id, gruppe.name " +
-                "FROM gruppe " +
-                "INNER JOIN user_ist_mitglied_in_gruppe " +
+                        "FROM gruppe " +
+                        "INNER JOIN user_ist_mitglied_in_gruppe " +
                         "ON gruppe._id = user_ist_mitglied_in_gruppe.gruppe_id   " +
-                "WHERE user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null
+                        "WHERE user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null
         );
 
 
@@ -300,7 +323,7 @@ public class Data_Access extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = "+ user_id +" AND gruppen_id = " + gruppen_id + ");");
+        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppen_id = " + gruppen_id + ");");
 
         db.close();
     }
@@ -317,9 +340,75 @@ public class Data_Access extends SQLiteOpenHelper {
         return 0;
     }
 
-    //Registration
-    public int addUser(String name, String email, String passwort){
 
+
+
+    public String stripHtml(String html)
+    {
+
+        return html.substring(html.indexOf("{"), html.lastIndexOf("}") + 1);
+    }
+
+    //Registration
+    public String registration(String name, String email, String passwort){
+        String url = "http://home.htw-berlin.de/~s0539589/Finanzplanung/registration.php";
+
+        ServiceHandler sh = new ServiceHandler();
+
+        // Making a request to url and getting response
+        List<NameValuePair> PHPanfrage = new ArrayList<>();
+
+        PHPanfrage.add(new BasicNameValuePair("email", email));
+        PHPanfrage.add(new BasicNameValuePair("name", name));
+        PHPanfrage.add(new BasicNameValuePair("password", passwort));
+
+        String jsonStr = sh.makeServiceCall(url, ServiceHandler.POST,PHPanfrage);
+
+        Log.d("Response: ", "> " + jsonStr);
+
+
+        if (jsonStr != null) {
+            try {
+                JSONObject jsonObj = new JSONObject(stripHtml(jsonStr));
+
+                jsonStr = jsonObj.getString("exception");
+
+/*
+                // Getting JSON Array node
+                contacts = jsonObj.getJSONArray(TAG_CONTACTS);
+
+                // looping through All Contacts
+                for (int i = 0; i < contacts.length(); i++) {
+                    JSONObject c = contacts.getJSONObject(i);
+
+                    String id = c.getString(TAG_ID);
+                    String name = c.getString(TAG_NAME);
+                    String email = c.getString(TAG_EMAIL);
+
+
+                    // tmp hashmap for single contact
+                    HashMap<String, String> contact = new HashMap<String, String>();
+
+                    // adding each child node to HashMap key => value
+                    contact.put(TAG_ID, id);
+                    contact.put(TAG_NAME, name);
+                    contact.put(TAG_EMAIL, email);
+
+                    // adding contact to contact list
+                    contactList.add(contact);
+          */
+                } catch (JSONException e) {
+                jsonStr = "hallo1"+stripHtml(jsonStr);
+                e.printStackTrace();
+            }
+        } else {
+            Log.e("ServiceHandler", "Couldn't get any data from the url");
+            jsonStr = "Couldn't get any data from the url";
+        }
+
+        return jsonStr;
+    }
+    public int addUser(String name, String email, String passwort){
         SQLiteDatabase db = this.getWritableDatabase();
 
         //datum TEXT as strings ("YYYY-MM-DD").
