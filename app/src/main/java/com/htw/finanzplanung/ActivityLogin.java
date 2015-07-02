@@ -1,6 +1,8 @@
 package com.htw.finanzplanung;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +18,8 @@ public class ActivityLogin extends AppCompatActivity{
     // Anlegen der Variabeln
     EditText inputEmail;
     EditText inputPasswort;
+    Data_Access dataAccess = new Data_Access(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +31,8 @@ public class ActivityLogin extends AppCompatActivity{
         inputPasswort = (EditText) findViewById(R.id.passwort);
         Button registrationButton = (Button) findViewById(R.id.bt_registration);
         Button loginButton = (Button) findViewById(R.id.bt_login);
-
+        Button passwortVergessenButton = (Button) findViewById(R.id.bt_vergessen);
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         // ClickListener implementieren für den Button zum Wechsel der Activity
         registrationButton.setOnClickListener(new View.OnClickListener() {
 
@@ -60,6 +65,20 @@ public class ActivityLogin extends AppCompatActivity{
                 // Intent starten und zur zweiten Activity wechseln
                 startActivity(nextScreen);
 
+            }
+        });
+        passwortVergessenButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                alertDialog.setTitle("Passwort Vergessen");
+                alertDialog.setMessage(dataAccess.sendPasswortToEmail(inputEmail.getText().toString()));
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // here you can add functions
+                    }
+                });
+
+                alertDialog.show();
             }
         });
 

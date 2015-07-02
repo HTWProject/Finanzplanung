@@ -40,10 +40,10 @@ public class ActivityRegistration extends AppCompatActivity {
 
             public void onClick(View arg0) {
                 alertDialog.setTitle("Registration");
-                alertDialog.setMessage(dataAccess.registration( inputName.getText().toString(),inputEmail.getText().toString(),inputPasswort.getText().toString()));
+                alertDialog.setMessage(dataAccess.registration(inputName.getText().toString(), inputEmail.getText().toString(), inputPasswort.getText().toString(), inputPasswortValidierung.getText().toString()));
                 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-// here you can add functions
+                        // here you can add functions
                     }
                 });
 
