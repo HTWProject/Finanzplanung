@@ -34,14 +34,14 @@ DROP PROCEDURE IF EXISTS s0539589.FINANZLogin;
 delimiter //
 CREATE PROCEDURE s0539589.FINANZLogin(IN $email VARCHAR(255),IN $passwort VARCHAR(255),IN $ip VARCHAR(255))
 BEGIN
-	IF EXISTS(SELECT * FROM user WHERE _id=$account_id AND aktiviert = $aktiviert AND email = $email) THEN
+	IF EXISTS(SELECT * FROM user WHERE aktiviert = 1 AND email = $email AND passwort = $passwort) THEN
 		UPDATE user SET `online` = CURRENT_TIMESTAMP, `ip` = $ip  WHERE email = $email AND passwort = $passwort;
-		SELECT _id, name, email, aktiviert, ("OK") AS exception FROM user WHERE email = $email AND passwort = $passwort;
+		SELECT _id, name, email, ("OK") AS exception FROM user WHERE email = $email AND passwort = $passwort;
+	ELSEIF EXISTS(SELECT * FROM user WHERE aktiviert != 1 AND email = $email AND passwort = $passwort) THEN
+		SELECT ("Account noch nicht Activiert") AS exception;
 	ELSE 
 		SELECT ("Falsche Eingabe") AS exception;
 	END IF;
-
-	
 END//
 delimiter ;
 
