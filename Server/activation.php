@@ -10,7 +10,7 @@
 	$code 		= mysqli_real_escape_string($db_conx, htmlspecialchars($_GET['code'], ENT_QUOTES));
 
 	
-	$result = mysqli_query($db_conx," CALL aktivierung('$user_id','$email','$code') ");
+	$result = mysqli_query($db_conx," CALL FINANZaktivierung('$user_id','$email','$code') ");
 		
 	if (mysqli_affected_rows($db_conx)) {
 		echo "NICE"; 

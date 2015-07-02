@@ -10,7 +10,7 @@ import android.widget.Button;
 
 
 public class ActivityHome extends AppCompatActivity {
-
+    Data_Access dataAccess = new Data_Access(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +19,7 @@ public class ActivityHome extends AppCompatActivity {
 
         Button settingsButton = (Button) findViewById(R.id.bt_settings);
         Button gruppenverwaltungButton = (Button) findViewById(R.id.bt_gruppen);
-
+        //Button logoutButton = (Button) findViewById(R.id.bt_logout);
 
         // ClickListener implementieren für den Button zum Wechsel der Activity
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -32,8 +32,21 @@ public class ActivityHome extends AppCompatActivity {
 
             }
         });
+/*
+        // ClickListener implementieren für den Button zum Wechsel der Activity
+        logoutButton.setOnClickListener(new View.OnClickListener() {
 
+            public void onClick(View arg0) {
+                dataAccess.Logout();
+                //Neues Intent anlegen
+                Intent nextScreen = new Intent(getApplicationContext(), ActivityLogin.class);
+                // Intent starten und zur zweiten Activity wechseln
+                startActivity(nextScreen);
 
+            }
+        });
+
+*/
         // ClickListener implementieren für den Button zum Wechsel der Activity
         gruppenverwaltungButton.setOnClickListener(new View.OnClickListener() {
 
@@ -68,7 +81,14 @@ public class ActivityHome extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
+        if (id == R.id.logout) {
+            dataAccess.Logout();
+            //Neues Intent anlegen
+            Intent nextScreen = new Intent(getApplicationContext(), ActivityLogin.class);
+            // Intent starten und zur zweiten Activity wechseln
+            startActivity(nextScreen);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

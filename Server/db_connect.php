@@ -1,5 +1,5 @@
 <?php
-$db_conx = mysqli_connect("cgi.rz.htw-berlin.de","s0539589","Passwort","s0539589");		
+$db_conx = mysqli_connect("cgi.rz.htw-berlin.de","s0539589","Kis-Kija","s0539589");		
 
 	
 

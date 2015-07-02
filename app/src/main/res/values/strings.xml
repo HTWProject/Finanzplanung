@@ -28,4 +28,6 @@
     <string name="title_activity_activity_finanzen">ActivityFinanzen</string>
     <string name="bt_addBetrag">+</string>
     <string name="gesamtbetrag">Gesamt</string>
+    <string name="bt_logout">Logout</string>
+    <string name="bt_resetDB">Reset</string>
 </resources>

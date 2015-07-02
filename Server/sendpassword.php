@@ -6,12 +6,14 @@
 
 	$email 		= mysqli_real_escape_string($db_conx, htmlspecialchars($_POST['email'], ENT_QUOTES));
 
-	$result = mysqli_query($db_conx," CALL LoginFail('$email')");
+	$result = mysqli_query($db_conx," CALL FINANZLoginFail('$email')");
 
 	if (mysqli_num_rows($result)>0) {
 		$passwort_array = mysqli_fetch_array( $result , MYSQL_ASSOC);
     		email($passwort_array['email'], $passwort_array['name'], $passwort_array['passwort']);
-		echo $passwort_array['email'];
+		echo '{"exception":"Das Passwort wurde an ' . $email . ' gesendet"}';
+	}else{
+		echo '{"exception":"Kein User ist mit der eMail:' . $email . ' registriert"}';
 	}
 	mysqli_close($db_conx);
 

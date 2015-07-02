@@ -2,6 +2,7 @@
   <dictionary name="linux">
     <words>
       <w>gruppe</w>
+      <w>loginstatus</w>
     </words>
   </dictionary>
 </component>

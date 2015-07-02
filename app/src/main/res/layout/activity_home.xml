@@ -40,7 +40,9 @@
                     android:text="@string/Settings"
                     android:id="@+id/bt_settings"
                     android:layout_gravity="right" />
+
             </LinearLayout>
+
         </LinearLayout>
 
         <ListView

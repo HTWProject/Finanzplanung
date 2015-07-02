@@ -32,7 +32,9 @@ public class Data_Access extends SQLiteOpenHelper{
         //SQLiteDatabase db = this.getWritableDatabase();
     }
 
-
+    public void databaseDelete(Context context){
+        context.deleteDatabase(DATABASE_NAME);
+    }
 
 
     @Override
@@ -40,11 +42,11 @@ public class Data_Access extends SQLiteOpenHelper{
         db.execSQL("PRAGMA foreign_keys = OFF;");
         db.execSQL("CREATE TABLE IF NOT EXISTS user " +
                         "(" +
-                            "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                            "  name TEXT," +
-                            "  email TEXT UNIQUE," +
-                            "  passwort TEXT NOT NULL," +
-                            "  loginstatus INTEGER DEFAULT 0" +
+                        "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "  name TEXT," +
+                        "  email TEXT UNIQUE," +
+                        "  passwort TEXT NOT NULL," +
+                        "  loginstatus INTEGER DEFAULT 1" +
                         ")"
         );
 
@@ -186,8 +188,8 @@ public class Data_Access extends SQLiteOpenHelper{
 
         Cursor c = db.rawQuery(
                 "SELECT sum(geldbetrag) AS Summe " +
-                "FROM ausgabe " +
-                "WHERE gruppe_id = " + gruppen_id +" " +
+                        "FROM ausgabe " +
+                        "WHERE gruppe_id = " + gruppen_id + " " +
                         "AND Date(ausgabe.datum) BETWEEN Date('" + startdatum + "') AND Date('" + enddatum + "') ", null
         );
         Float gesamtgeldbetrag = 0f;
@@ -276,7 +278,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         Integer zwisch = -1;
         if(user_id.intValue() == getGruppenMasterID(gruppen_id).intValue()){
-            db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = "+ mitglied_id +" AND gruppen_id = " + gruppen_id + ");");
+            db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + mitglied_id + " AND gruppen_id = " + gruppen_id + ");");
             zwisch = 0;
         }
 
@@ -336,30 +338,113 @@ public class Data_Access extends SQLiteOpenHelper{
     }
 
     //Startseite
-    public Mitglied Login(String email,String passwort){
 
 
-        return null;
+    public String Login(String email,String passwort){
+            String url = "http://home.htw-berlin.de/~s0539589/Finanzplanung/login.php";
+
+            ServiceHandler sh = new ServiceHandler();
+
+            // Making a request to url and getting response
+            List<NameValuePair> PHPanfrage = new ArrayList<>();
+
+            PHPanfrage.add(new BasicNameValuePair("email", email));
+            PHPanfrage.add(new BasicNameValuePair("password", passwort));
+
+            String jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, PHPanfrage);
+
+            Log.d("Response: ", "> " + jsonStr);
+
+
+            if (jsonStr != null) {
+                 try {
+
+                    JSONObject jsonObj = new JSONObject(stripHtml(jsonStr));
+
+
+
+                    if(jsonObj.getString("exception").equals("OK")) {
+
+                        Integer user_id = jsonObj.getInt("_id");
+
+                        Logout();
+
+                        setLoginState(user_id);
+
+                        if (getLoginState() != user_id) {
+                            addUser(user_id, jsonObj.getString("name"), jsonObj.getString("email"), passwort);
+                        }
+
+                    }else{
+                        jsonStr = jsonObj.getString("exception");
+                    }
+
+
+                } catch (JSONException e) {
+                    jsonStr = "ERROR: ";
+                    e.printStackTrace();
+                }
+
+            } else {
+                Log.e("ServiceHandler", "Couldn't get any data from the url");
+
+                if(!LoginLocal(email, passwort)){
+                    jsonStr = "ERROR: NO INTERNET CONNECTION";
+                }
+
+
+            }
+            sh.destroy();
+
+        return jsonStr;
     }
+    public Boolean LoginLocal(String email, String passwort){
+        Integer user_id = getLoginState();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Boolean zwisch = false;
+        Cursor c = db.rawQuery(
+                "SELECT _id " +
+                        "FROM user " +
+                        "WHERE email = " + email + " " +
+                        "AND passwort = "+passwort+" ", null
+        );
 
+        if(c.moveToFirst()){
+            zwisch = true;
+            setLoginState(c.getInt(0));
+        }
+        c.close();
+        db.close();
+        return zwisch;
+    }
+    public void setLoginState(Integer user_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("UPDATE user SET loginstatus = 1 WHERE _id = " + user_id + " ");
+
+        db.close();
+    }
     public Integer getLoginState(){
         Integer id = null;
+
         SQLiteDatabase db = this.getWritableDatabase();
 
 
-        Cursor c = db.rawQuery(
-                "SELECT _id " +
-                "FROM user " +
-                "WHERE loginstatus = 1 ", null
-        );
+            Cursor c = db.rawQuery(
+                    "SELECT _id " +
+                            "FROM user " +
+                            "WHERE loginstatus = 1 ", null
+            );
 
 
-        if(c.moveToFirst()){
-            do{
-                id = c.getInt(0);
-            }while(c.moveToNext());
-        }
-        c.close();
+            if(c.moveToFirst()){
+                do{
+                    id = c.getInt(0);
+                }while(c.moveToNext());
+            }
+            c.close();
+
+
         db.close();
 
 
@@ -367,18 +452,19 @@ public class Data_Access extends SQLiteOpenHelper{
         return id;
     }
 
-    public Boolean Logout(){
+    public void Logout(){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL(
-                "UPDATE user " +
-                        "SET loginstatus = 0 " +
-                        "WHERE loginstatus = 1 ", null
-        );
+            db.execSQL(
+                    "UPDATE user " +
+                            "SET loginstatus = 0 " +
+                            "WHERE loginstatus = 1 ;"
+            );
+
+
 
         db.close();
 
-        return null;
     }
 
 
@@ -409,7 +495,6 @@ public class Data_Access extends SQLiteOpenHelper{
         }
 
         sh.destroy();
-
         return jsonStr;
     }
 
@@ -419,6 +504,10 @@ public class Data_Access extends SQLiteOpenHelper{
     public String stripHtml(String html)
     {
         return html.substring(html.indexOf("{"), html.lastIndexOf("}") + 1);
+    }
+    public String stripHtmlForArray(String html)
+    {
+        return html.substring(html.indexOf("["), html.lastIndexOf("]") + 1);
     }
 
     //Registration
@@ -493,10 +582,10 @@ public class Data_Access extends SQLiteOpenHelper{
         //datum TEXT as strings ("YYYY-MM-DD").
         db.execSQL("INSERT INTO user (_id, name, email, passwort) " +
                 "VALUES (" +
-                "  " +user_id         +" , " +
-                " '" +name            +"', " +
-                " '" +email           +"', " +
-                " '" +passwort        +"'  " +
+                "  " + user_id + " , " +
+                " '" + name + "', " +
+                " '" + email + "', " +
+                " '" + passwort + "'  " +
                 ");");
         db.close();
         return 0;
@@ -508,7 +597,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         if(validation(oldpasswort)){
-            db.execSQL("UPDATE user SET password = '"+ newpasswort +"' WHERE _id = "+ user_id +";");
+            db.execSQL("UPDATE user SET password = '" + newpasswort + "' WHERE _id = " + user_id + ";");
         }
 
         db.close();
@@ -542,7 +631,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         if(validation(passwort)){
-            db.execSQL("UPDATE user SET name = '"+ newName +"' WHERE _id = "+ user_id +";");
+            db.execSQL("UPDATE user SET name = '" + newName + "' WHERE _id = " + user_id + ";");
         }
 
         db.close();
@@ -554,7 +643,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         if(validation(passwort)){
-            db.execSQL("UPDATE setting SET server = '"+ newServer +"' WHERE user_id = "+ user_id +";");
+            db.execSQL("UPDATE setting SET server = '" + newServer + "' WHERE user_id = " + user_id + ";");
         }
 
         db.close();
@@ -566,7 +655,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         if(validation(passwort)){
-            db.execSQL("UPDATE setting SET mobile_sync = "+ (mobileSync?1:0) +" WHERE user_id = "+ user_id +";");
+            db.execSQL("UPDATE setting SET mobile_sync = " + (mobileSync ? 1 : 0) + " WHERE user_id = " + user_id + ";");
         }
         db.close();
     }
