@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="13.1">
-  <zoom_level>9</zoom_level>
+  <zoom_level>7</zoom_level>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1107</x>
-      <y>36</y>
-      <w>108</w>
-      <h>126</h>
+      <x>861</x>
+      <y>28</y>
+      <w>84</w>
+      <h>98</h>
     </coordinates>
     <panel_attributes>startbildschirm</panel_attributes>
     <additional_attributes/>
@@ -15,10 +15,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1152</x>
+      <x>896</x>
       <y>0</y>
-      <w>27</w>
-      <h>54</h>
+      <w>21</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
@@ -26,10 +26,10 @@
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>846</x>
-      <y>423</y>
-      <w>108</w>
-      <h>45</h>
+      <x>658</x>
+      <y>329</y>
+      <w>84</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Registrierung</panel_attributes>
     <additional_attributes/>
@@ -37,10 +37,10 @@
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1386</x>
-      <y>171</y>
-      <w>126</w>
-      <h>45</h>
+      <x>1078</x>
+      <y>133</y>
+      <w>98</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Passwort Vergessen</panel_attributes>
     <additional_attributes/>
@@ -48,10 +48,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1206</x>
-      <y>117</y>
-      <w>297</w>
-      <h>72</h>
+      <x>938</x>
+      <y>91</y>
+      <w>231</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Email gesendet</panel_attributes>
@@ -60,10 +60,10 @@ Email gesendet</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>864</x>
-      <y>63</y>
-      <w>261</w>
-      <h>378</h>
+      <x>672</x>
+      <y>49</y>
+      <w>203</w>
+      <h>294</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Drücken "Registrierung"</panel_attributes>
@@ -72,10 +72,10 @@ Drücken "Registrierung"</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1125</x>
-      <y>450</y>
-      <w>135</w>
-      <h>45</h>
+      <x>875</x>
+      <y>350</y>
+      <w>105</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Login</panel_attributes>
     <additional_attributes/>
@@ -83,10 +83,10 @@ Drücken "Registrierung"</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1161</x>
-      <y>153</y>
-      <w>99</w>
-      <h>315</h>
+      <x>903</x>
+      <y>119</y>
+      <w>77</w>
+      <h>245</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 
@@ -99,10 +99,10 @@ Drücken
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1179</x>
-      <y>153</y>
-      <w>225</w>
-      <h>72</h>
+      <x>917</x>
+      <y>119</y>
+      <w>175</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 
@@ -113,10 +113,10 @@ Drücken
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1125</x>
-      <y>153</y>
-      <w>72</w>
-      <h>315</h>
+      <x>875</x>
+      <y>119</y>
+      <w>56</w>
+      <h>245</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Falsche
@@ -126,10 +126,10 @@ Angaben</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1008</x>
-      <y>135</y>
-      <w>135</w>
-      <h>351</h>
+      <x>784</x>
+      <y>105</y>
+      <w>105</w>
+      <h>273</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 "Account noch
@@ -139,23 +139,23 @@ nicht aktivieren"</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1206</x>
-      <y>81</y>
-      <w>432</w>
-      <h>135</h>
+      <x>938</x>
+      <y>63</y>
+      <w>336</w>
+      <h>105</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
-    Falsch Email oder
+    Falsch Email /
   noch nicht registriert</panel_attributes>
     <additional_attributes>340.0;130.0;400.0;130.0;400.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1197</x>
-      <y>486</y>
-      <w>81</w>
-      <h>99</h>
+      <x>931</x>
+      <y>378</y>
+      <w>63</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Login
@@ -167,10 +167,10 @@ bestätigen
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1152</x>
-      <y>558</y>
-      <w>108</w>
-      <h>198</h>
+      <x>896</x>
+      <y>434</y>
+      <w>84</w>
+      <h>154</h>
     </coordinates>
     <panel_attributes>Home</panel_attributes>
     <additional_attributes/>
@@ -178,10 +178,10 @@ bestätigen
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>792</x>
-      <y>45</y>
-      <w>378</w>
-      <h>549</h>
+      <x>616</x>
+      <y>35</y>
+      <w>294</w>
+      <h>427</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 
@@ -193,10 +193,10 @@ Drücken
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>927</x>
-      <y>117</y>
-      <w>198</w>
-      <h>342</h>
+      <x>721</x>
+      <y>91</y>
+      <w>154</w>
+      <h>266</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 
@@ -214,10 +214,10 @@ Email gesendet
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>891</x>
-      <y>90</y>
-      <w>234</w>
-      <h>351</h>
+      <x>693</x>
+      <y>70</y>
+      <w>182</w>
+      <h>273</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Email
@@ -228,10 +228,10 @@ vergeben</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>99</x>
-      <y>936</y>
-      <w>171</w>
-      <h>45</h>
+      <x>77</x>
+      <y>728</y>
+      <w>133</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Gruppenverwaltung</panel_attributes>
     <additional_attributes/>
@@ -239,46 +239,35 @@ vergeben</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1485</x>
-      <y>1035</y>
-      <w>153</w>
-      <h>54</h>
+      <x>1155</x>
+      <y>805</y>
+      <w>119</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>user gesamtbetrag</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLState</id>
-    <coordinates>
-      <x>1431</x>
-      <y>441</y>
-      <w>126</w>
-      <h>45</h>
-    </coordinates>
-    <panel_attributes>Gruppen Verlassen</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>1251</x>
-      <y>459</y>
-      <w>198</w>
-      <h>135</h>
+      <x>973</x>
+      <y>434</y>
+      <w>140</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Drücken" gruppen
 verlassen"
 </panel_attributes>
-    <additional_attributes>10.0;130.0;100.0;130.0;100.0;10.0;200.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0;130.0;50.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>126</x>
-      <y>603</y>
-      <w>1044</w>
-      <h>351</h>
+      <x>98</x>
+      <y>469</y>
+      <w>812</w>
+      <h>273</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Drücken "Gruppenverwaltung"</panel_attributes>
@@ -287,10 +276,10 @@ Drücken "Gruppenverwaltung"</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1134</x>
-      <y>981</y>
-      <w>171</w>
-      <h>243</h>
+      <x>882</x>
+      <y>763</y>
+      <w>133</w>
+      <h>189</h>
     </coordinates>
     <panel_attributes>Finanz</panel_attributes>
     <additional_attributes/>
@@ -298,10 +287,10 @@ Drücken "Gruppenverwaltung"</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1863</x>
-      <y>756</y>
-      <w>198</w>
-      <h>45</h>
+      <x>1449</x>
+      <y>588</y>
+      <w>154</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Einstellung</panel_attributes>
     <additional_attributes/>
@@ -310,9 +299,9 @@ Drücken "Gruppenverwaltung"</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>0</x>
-      <y>945</y>
-      <w>117</w>
-      <h>243</h>
+      <y>735</y>
+      <w>91</w>
+      <h>189</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Drücken "neue 
@@ -322,10 +311,10 @@ gruppen erstellen"</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>99</x>
-      <y>1143</y>
-      <w>189</w>
-      <h>45</h>
+      <x>77</x>
+      <y>889</y>
+      <w>147</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Gruppen erstellen</panel_attributes>
     <additional_attributes/>
@@ -333,10 +322,10 @@ gruppen erstellen"</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>207</x>
-      <y>972</y>
-      <w>126</w>
-      <h>189</h>
+      <x>161</x>
+      <y>756</y>
+      <w>98</w>
+      <h>147</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Gruppe erfolgreich
@@ -346,10 +335,10 @@ erstellt</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>135</x>
-      <y>972</y>
-      <w>72</w>
-      <h>189</h>
+      <x>105</x>
+      <y>756</y>
+      <w>56</w>
+      <h>147</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Gruppe
@@ -357,23 +346,12 @@ existiert</panel_attributes>
     <additional_attributes>10.0;190.0;10.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>UMLState</id>
-    <coordinates>
-      <x>387</x>
-      <y>1143</y>
-      <w>189</w>
-      <h>45</h>
-    </coordinates>
-    <panel_attributes>Gruppen löschen</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>1251</x>
-      <y>675</y>
-      <w>243</w>
-      <h>36</h>
+      <x>973</x>
+      <y>525</y>
+      <w>189</w>
+      <h>28</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Home button bestätigen</panel_attributes>
@@ -382,37 +360,24 @@ Home button bestätigen</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>261</x>
-      <y>927</y>
-      <w>306</w>
-      <h>234</h>
+      <x>196</x>
+      <y>728</y>
+      <w>301</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
+   
     Drücken "Gruppe löschen"
 </panel_attributes>
-    <additional_attributes>10.0;20.0;320.0;20.0;320.0;240.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>261</x>
-      <y>963</y>
-      <w>252</w>
-      <h>198</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-gruppe
-erfolgreich
-gelöscht</panel_attributes>
-    <additional_attributes>200.0;200.0;200.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>20.0;10.0;330.0;10.0;330.0;50.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1881</x>
-      <y>1017</y>
-      <w>144</w>
-      <h>45</h>
+      <x>1463</x>
+      <y>791</y>
+      <w>112</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Daten Aktualisierung </panel_attributes>
     <additional_attributes/>
@@ -420,23 +385,10 @@ gelöscht</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1251</x>
-      <y>477</y>
-      <w>288</w>
-      <h>135</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-             Drücken 
-    "return Button"</panel_attributes>
-    <additional_attributes>260.0;10.0;260.0;80.0;160.0;80.0;160.0;130.0;10.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1746</x>
-      <y>774</y>
-      <w>153</w>
-      <h>288</h>
+      <x>1358</x>
+      <y>602</y>
+      <w>119</w>
+      <h>224</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 save
@@ -446,10 +398,10 @@ save
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1863</x>
-      <y>873</y>
-      <w>189</w>
-      <h>45</h>
+      <x>1449</x>
+      <y>679</y>
+      <w>147</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Identitäten Prüfung</panel_attributes>
     <additional_attributes/>
@@ -457,10 +409,10 @@ save
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1935</x>
-      <y>909</y>
-      <w>144</w>
-      <h>126</h>
+      <x>1505</x>
+      <y>707</y>
+      <w>112</w>
+      <h>98</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Geben Sie Ihr
@@ -470,10 +422,10 @@ aktuelles Passwort an</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1980</x>
-      <y>792</y>
-      <w>81</w>
-      <h>126</h>
+      <x>1540</x>
+      <y>616</y>
+      <w>63</w>
+      <h>98</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Prüfung 
@@ -487,10 +439,10 @@ erfolgreich
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1908</x>
-      <y>792</y>
-      <w>72</w>
-      <h>99</h>
+      <x>1484</x>
+      <y>616</y>
+      <w>56</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Falsche
@@ -501,10 +453,10 @@ Angabe
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1251</x>
-      <y>594</y>
-      <w>756</w>
-      <h>180</h>
+      <x>973</x>
+      <y>462</y>
+      <w>588</w>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
                                   Drücken "Einstellung"</panel_attributes>
@@ -513,10 +465,10 @@ Angabe
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1251</x>
-      <y>630</y>
-      <w>729</w>
-      <h>144</h>
+      <x>973</x>
+      <y>490</y>
+      <w>567</w>
+      <h>112</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
     Drücken
@@ -526,10 +478,10 @@ Angabe
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>180</x>
-      <y>675</y>
-      <w>990</w>
-      <h>279</h>
+      <x>140</x>
+      <y>525</y>
+      <w>770</w>
+      <h>217</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Drücken
@@ -539,10 +491,10 @@ Drücken
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1170</x>
-      <y>747</y>
-      <w>81</w>
-      <h>252</h>
+      <x>910</x>
+      <y>581</y>
+      <w>63</w>
+      <h>196</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
  
@@ -556,10 +508,10 @@ aus</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1233</x>
-      <y>747</y>
-      <w>117</w>
-      <h>252</h>
+      <x>959</x>
+      <y>581</y>
+      <w>91</w>
+      <h>196</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
     Drücken 
@@ -569,10 +521,10 @@ aus</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1143</x>
-      <y>1413</y>
-      <w>135</w>
-      <h>63</h>
+      <x>889</x>
+      <y>1099</y>
+      <w>105</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>Geld Ausgaben
 hinzufügen</panel_attributes>
@@ -581,10 +533,10 @@ hinzufügen</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>198</x>
-      <y>864</y>
-      <w>954</w>
-      <h>162</h>
+      <x>154</x>
+      <y>672</y>
+      <w>742</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 
@@ -594,10 +546,10 @@ hinzufügen</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1242</x>
-      <y>1215</y>
-      <w>117</w>
-      <h>216</h>
+      <x>966</x>
+      <y>945</y>
+      <w>91</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Falsche Angabe</panel_attributes>
@@ -606,10 +558,10 @@ Falsche Angabe</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1152</x>
-      <y>1215</y>
-      <w>90</w>
-      <h>216</h>
+      <x>896</x>
+      <y>945</y>
+      <w>70</w>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Geben 
@@ -620,33 +572,21 @@ Angaben an</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>1494</x>
-      <y>1170</y>
-      <w>135</w>
-      <h>54</h>
+      <x>1162</x>
+      <y>910</y>
+      <w>105</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>gruppen gesamtbetrag</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLState</id>
-    <coordinates>
-      <x>774</x>
-      <y>1080</y>
-      <w>117</w>
-      <h>108</h>
-    </coordinates>
-    <panel_attributes>Alle Ausgaben 
-von eines User</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>1296</x>
-      <y>1044</y>
-      <w>207</w>
-      <h>72</h>
+      <x>1008</x>
+      <y>812</y>
+      <w>161</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
  Wählen
@@ -658,24 +598,23 @@ datum aus
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>882</x>
-      <y>1080</y>
-      <w>270</w>
-      <h>54</h>
+      <x>749</x>
+      <y>819</y>
+      <w>147</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
- Wählen
-"user" 
-aus</panel_attributes>
-    <additional_attributes>280.0;20.0;10.0;20.0</additional_attributes>
+userGewählt / 
+  detailsFuerUaerZeigen</panel_attributes>
+    <additional_attributes>190.0;10.0;70.0;10.0;70.0;90.0;190.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1296</x>
-      <y>1179</y>
-      <w>216</w>
-      <h>45</h>
+      <x>1008</x>
+      <y>917</y>
+      <w>168</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 Anzeige des Gruppen
@@ -685,10 +624,10 @@ gesamtbetrag</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1548</x>
-      <y>1080</y>
-      <w>135</w>
-      <h>108</h>
+      <x>1204</x>
+      <y>840</y>
+      <w>105</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
   Anzeige des
@@ -696,25 +635,12 @@ User gesamtbetrag</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>882</x>
-      <y>1134</y>
-      <w>270</w>
-      <h>45</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;
-Anzeigen vo
-n Ausgaben von User</panel_attributes>
-    <additional_attributes>10.0;20.0;280.0;20.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLSpecialState</id>
     <coordinates>
-      <x>1152</x>
+      <x>896</x>
       <y>0</y>
-      <w>18</w>
-      <h>18</h>
+      <w>14</w>
+      <h>14</h>
     </coordinates>
     <panel_attributes>type=initial</panel_attributes>
     <additional_attributes/>
@@ -722,10 +648,10 @@ n Ausgaben von User</panel_attributes>
   <element>
     <id>UMLSpecialState</id>
     <coordinates>
-      <x>1476</x>
-      <y>684</y>
-      <w>18</w>
-      <h>18</h>
+      <x>1148</x>
+      <y>532</y>
+      <w>14</w>
+      <h>14</h>
     </coordinates>
     <panel_attributes>type=final</panel_attributes>
     <additional_attributes/>
