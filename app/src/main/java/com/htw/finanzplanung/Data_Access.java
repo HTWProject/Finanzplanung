@@ -127,11 +127,22 @@ public class Data_Access extends SQLiteOpenHelper{
         Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
         int zwisch = 0;
+        //Log.d("Response Delete: ", "> " + "ready"+user_id);
+        //if (!db.isOpen()) {
+            //Log.d("Response Delete: ", "> " + "DBwhat close");
+        //}
         if(user_id.equals(getGruppenMasterID(gruppen_id))){
-            db.execSQL("DELETE FROM gruppe WHERE _id = " + gruppen_id + ");");
+            //Log.d("Response Delete: ", "> " + "OK1");
+            //if (!db.isOpen()) {
+                //Log.d("Response Delete: ", "> " + "DB close");
+            //}
+            db.execSQL("DELETE FROM gruppe WHERE _id = " + gruppen_id + " ");
             zwisch = 1;
-        }
-
+            //Log.d("Response Delete: ", "> " + "OK");
+        }//else{
+            //Log.d("Response Delete: ", "> " + "ERROR");
+        //}
+        //Log.d("Response Delete: ", "> " + "finish");
         db.close();
 
         return zwisch;
@@ -150,16 +161,17 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         Integer user_id = -1;
 
-        Cursor c = db.rawQuery("SELECT user_id FROM gruppe  WHERE _id = " + gruppen_id + " ", null);
+        Cursor c = db.rawQuery("SELECT user_id FROM gruppe  WHERE _id = " + gruppen_id + " ;", null);
 
 
         if(c.moveToFirst()){
-            do{
+            //do{
                 user_id = c.getInt(0);
-            }while(c.moveToNext());
+            //}while(c.moveToNext());
         }
         c.close();
-        db.close();
+
+        Log.d("Response MasterID: ", "> " + user_id);
 
         return user_id;
     }
@@ -190,7 +202,8 @@ public class Data_Access extends SQLiteOpenHelper{
                 "SELECT sum(geldbetrag) AS Summe " +
                         "FROM ausgabe " +
                         "WHERE gruppe_id = " + gruppen_id + " " +
-                        "AND Date(ausgabe.datum) BETWEEN Date('" + startdatum + "') AND Date('" + enddatum + "') ", null
+                        "AND Date(ausgabe.datum) BETWEEN Date('" + startdatum + "') AND Date('" + enddatum + "')" +
+                        "GROUP BY gruppe_id ;", null
         );
         Float gesamtgeldbetrag = 0f;
         if(c.moveToFirst()){
@@ -212,7 +225,8 @@ public class Data_Access extends SQLiteOpenHelper{
                         "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
                         "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
                         "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
-                        "AND Date(ausgabe.datum) BETWEEN Date('" + startdatum + "') AND Date('" + enddatum + "') ", null
+                        "AND Date(ausgabe.datum) BETWEEN Date('" + startdatum + "') AND Date('" + enddatum + "') " +
+                        "GROUP BY ausgabe.gruppe_id ;", null
         );
         Float gesamtgeldbetrag = 0f;
         if(c.moveToFirst()){
@@ -277,8 +291,8 @@ public class Data_Access extends SQLiteOpenHelper{
         Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
         Integer zwisch = -1;
-        if(user_id.intValue() == getGruppenMasterID(gruppen_id).intValue()){
-            db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + mitglied_id + " AND gruppen_id = " + gruppen_id + ");");
+        if(user_id.equals(getGruppenMasterID(gruppen_id))){
+            db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + mitglied_id + " AND gruppen_id = " + gruppen_id + " ");
             zwisch = 0;
         }
 
@@ -286,7 +300,7 @@ public class Data_Access extends SQLiteOpenHelper{
         return zwisch;
     }
 
-    public int addGruppenMitglied(Integer gruppen_id, Integer mitglied_id){
+    public void addGruppenMitglied(Integer gruppen_id, Integer mitglied_id){
         Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -295,9 +309,64 @@ public class Data_Access extends SQLiteOpenHelper{
                 "VALUES (" +
                 "  " + user_id + " , " +
                 "  " + gruppen_id + "   " +
-                ");");
+                ") ");
         db.close();
-        return 0;
+    }
+
+    public void addGruppenMitglied(Integer gruppen_id, String email){
+        Integer user_id = getLoginState();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String url = "http://home.htw-berlin.de/~s0539589/Finanzplanung/usersearch.php";
+
+        ServiceHandler sh = new ServiceHandler();
+
+        // Making a request to url and getting response
+        List<NameValuePair> PHPanfrage = new ArrayList<>();
+
+        PHPanfrage.add(new BasicNameValuePair("email", email));
+        //PHPanfrage.add(new BasicNameValuePair("gruppe", gruppen_id.toString()));
+
+        String jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, PHPanfrage);
+
+        Log.d("Response: ", "> " + jsonStr);
+
+
+        if (jsonStr != null) {
+            try {
+
+                JSONObject jsonObj = new JSONObject(stripHtml(jsonStr));
+
+
+
+                if(jsonObj.getString("exception").equals("OK")) {
+
+                    Integer mitglied_id = jsonObj.getInt("_id");
+
+                    addUser(mitglied_id, jsonObj.getString("name"), jsonObj.getString("email"), "wirste nie erraten");
+
+                    addGruppenMitglied(gruppen_id, mitglied_id);
+
+                }else{
+                    jsonStr = jsonObj.getString("exception");
+                }
+
+
+            } catch (JSONException e) {
+                jsonStr = "ERROR: ";
+                e.printStackTrace();
+            }
+
+        } else {
+            Log.e("ServiceHandler", "Couldn't get any data from the url");
+
+
+            jsonStr = "ERROR: NO INTERNET CONNECTION";
+
+
+        }
+        sh.destroy();
+        db.close();
     }
 
     //Home
@@ -399,7 +468,7 @@ public class Data_Access extends SQLiteOpenHelper{
         return jsonStr;
     }
     public Boolean LoginLocal(String email, String passwort){
-        Integer user_id = getLoginState();
+        //Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
         Boolean zwisch = false;
         Cursor c = db.rawQuery(
@@ -565,7 +634,7 @@ public class Data_Access extends SQLiteOpenHelper{
                     e.printStackTrace();
                 }
             } else {
-                Log.e("ServiceHandler", "Couldn't get any data from the url");
+                //Log.e("ServiceHandler", "Couldn't get any data from the url");
                 jsonStr = "ERROR: NO INTERNET CONNECTION";
 
             }
@@ -587,7 +656,7 @@ public class Data_Access extends SQLiteOpenHelper{
                 " '" + email + "', " +
                 " '" + passwort + "'  " +
                 ");");
-        db.close();
+
         return 0;
     }
 
@@ -617,11 +686,9 @@ public class Data_Access extends SQLiteOpenHelper{
 
         if(c.moveToFirst()){
             c.close();
-            db.close();
             return true;
         }else {
             c.close();
-            db.close();
             return false;
         }
     }

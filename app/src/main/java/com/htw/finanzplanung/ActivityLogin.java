@@ -51,17 +51,20 @@ public class ActivityLogin extends AppCompatActivity{
         registrationButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
+
                 //Neues Intent anlegen
                 Intent nextScreen = new Intent(getApplicationContext(), ActivityRegistration.class);
 
                 //Intent mit den Daten füllen
-                nextScreen.putExtra("Email", inputEmail.getText().toString());
-                nextScreen.putExtra("Passwort", inputPasswort.getText().toString());
+                //nextScreen.putExtra("Email", inputEmail.getText().toString());
+                //nextScreen.putExtra("Passwort", inputPasswort.getText().toString());
 
 
                 // Intent starten und zur zweiten Activity wechseln
+
                 startActivity(nextScreen);
 
+                //setContentView(R.layout.activity_registration);
             }
         });
 
