@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2015-05-08" view-index="0" gantt-divider-location="336" resource-divider-location="300" version="2.7" locale="de_DE">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2015-03-01" view-index="0" gantt-divider-location="257" resource-divider-location="300" version="2.7" locale="de">
     <description/>
-    <view zooming-state="default:2" id="gantt-chart">
-        <field id="tpd3" name="Vorgang" width="56" order="0"/>
-        <field id="tpd4" name="Anfang" width="21" order="1"/>
-        <field id="tpd5" name="Ende" width="21" order="2"/>
+    <view zooming-state="default:8" id="gantt-chart">
+        <field id="tpd3" name="Vorgang" width="55" order="0"/>
+        <field id="tpd4" name="Anfang" width="22" order="1"/>
+        <field id="tpd5" name="Ende" width="22" order="2"/>
     </view>
     <view id="resource-table">
         <field id="0" name="Ressource" width="50" order="0"/>
@@ -34,21 +34,21 @@
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
         <task id="0" name="plannung" color="#8cb6ce" meeting="false" start="2015-04-29" duration="1" complete="0" expand="true"/>
-        <task id="1" name="Diagramm" color="#8cb6ce" meeting="false" start="2015-05-05" duration="14" complete="0" expand="true">
-            <task id="2" name="Domain Diagramm" color="#8cb6ce" meeting="false" start="2015-05-18" duration="1" complete="0" expand="true"/>
-            <task id="19" name="Classen Diagramm" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
+        <task id="1" name="Diagramm" color="#8cb6ce" meeting="false" start="2015-05-04" duration="41" complete="0" expand="true">
+            <task id="2" name="Domain Diagramm" color="#8cb6ce" meeting="false" start="2015-06-15" duration="10" complete="0" expand="true"/>
+            <task id="19" name="Classen Diagramm" color="#8cb6ce" meeting="false" start="2015-05-12" duration="10" complete="0" expand="true"/>
             <task id="4" name="UI-Modell" color="#8cb6ce" meeting="false" start="2015-05-18" duration="1" complete="0" expand="true"/>
-            <task id="15" name="use case" color="#8cb6ce" meeting="false" start="2015-05-22" duration="1" complete="0" expand="true"/>
-            <task id="22" name="ER-Modell Lokal" meeting="false" start="2015-05-05" duration="3" complete="0" expand="true"/>
-            <task id="23" name="ER-Modell Global" meeting="false" start="2015-05-06" duration="1" complete="0" expand="true"/>
-            <task id="25" name="State Charts" meeting="false" start="2015-05-08" duration="1" complete="0" expand="true"/>
+            <task id="15" name="use case" color="#8cb6ce" meeting="false" start="2015-06-02" duration="4" complete="0" expand="true"/>
+            <task id="22" name="ER-Modell Lokal" meeting="false" start="2015-05-04" duration="20" complete="0" expand="true"/>
+            <task id="23" name="ER-Modell Global" meeting="false" start="2015-05-05" duration="19" complete="0" expand="true"/>
+            <task id="25" name="State Charts" meeting="false" start="2015-06-02" duration="20" complete="0" expand="true"/>
         </task>
         <task id="6" name="Testen(Implementierung)" color="#8cb6ce" meeting="false" start="2015-05-18" duration="1" complete="0" expand="true"/>
-        <task id="7" name="PHP  Pharser" color="#8cb6ce" meeting="false" start="2015-05-18" duration="6" complete="0" expand="true"/>
-        <task id="8" name="MySQL Datenbank" color="#8cb6ce" meeting="false" start="2015-05-18" duration="1" complete="0" expand="true"/>
-        <task id="9" name="Android App Classen" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true">
-            <task id="10" name="Algorithmus" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
-            <task id="11" name="JSON schnittstelle(classe)" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
+        <task id="7" name="PHP  Pharser" color="#8cb6ce" meeting="false" start="2015-05-21" duration="32" complete="0" expand="true"/>
+        <task id="8" name="MySQL Datenbank" color="#8cb6ce" meeting="false" start="2015-05-21" duration="32" complete="0" expand="true"/>
+        <task id="9" name="Android App Classen" color="#8cb6ce" meeting="false" start="2015-05-12" duration="39" complete="0" expand="true">
+            <task id="10" name="Algorithmus" color="#8cb6ce" meeting="false" start="2015-06-05" duration="21" complete="0" expand="true"/>
+            <task id="11" name="JSON schnittstelle(classe)" color="#8cb6ce" meeting="false" start="2015-06-08" duration="15" complete="0" expand="true"/>
             <task id="12" name="Test Classe" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
             <task id="13" name="GUI (Spinner)" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
             <task id="14" name="Vorgang_14" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
@@ -71,9 +71,9 @@
         <displaycolumn property-id="tpd8" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd9" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd2" order="-1" width="75" visible="false"/>
-        <displaycolumn property-id="tpd3" order="0" width="189" visible="true"/>
-        <displaycolumn property-id="tpd4" order="1" width="72" visible="true"/>
-        <displaycolumn property-id="tpd5" order="2" width="71" visible="true"/>
+        <displaycolumn property-id="tpd3" order="0" width="141" visible="true"/>
+        <displaycolumn property-id="tpd4" order="1" width="56" visible="true"/>
+        <displaycolumn property-id="tpd5" order="2" width="56" visible="true"/>
     </taskdisplaycolumns>
     <previous/>
     <roles roleset-name="Default"/>
