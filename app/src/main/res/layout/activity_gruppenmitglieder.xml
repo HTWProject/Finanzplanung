@@ -23,7 +23,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/mitgliederEmail"
                 android:inputType="textEmailAddress"
-                android:layout_weight="0.91" />
+                android:layout_weight="0.81"
+                android:backgroundTint="#808080"
+                android:textColor="#808080"/>
 
             <Button
                 android:layout_width="wrap_content"
@@ -36,6 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/listViewMitglieder"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
             />
 
     </LinearLayout>

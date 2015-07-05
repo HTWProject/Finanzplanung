@@ -64,12 +64,17 @@ public class ActivityGruppenmitglieder extends AppCompatActivity {
             public void onClick(View arg0) {
                 //Mitglied zur Gruppe hinzufügen
                 if(!inputMitglied.getText().toString().isEmpty()){
-                    dataAccess.addGruppenMitglied(gruppenID,inputMitglied.getText().toString());
-                    inputMitglied.getText().clear();
-                    meineMitglieder = dataAccess.getGruppenMitglieder(gruppenID);
-                    thadapter.arr.add(meineMitglieder.get(meineMitglieder.size()));
-                    thadapter.notifyDataSetChanged();
-                    Toast.makeText(getApplicationContext(), "Mitglied added", Toast.LENGTH_SHORT).show();
+                    String resultatAddMitglied = dataAccess.addGruppenMitglied(gruppenID,inputMitglied.getText().toString());
+                    if(resultatAddMitglied.equals("OK")){
+                        inputMitglied.getText().clear();
+                        meineMitglieder = dataAccess.getGruppenMitglieder(gruppenID);
+                        thadapter.arr.add(meineMitglieder.get(meineMitglieder.size()-1));
+                        thadapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), resultatAddMitglied , Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), resultatAddMitglied , Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
 

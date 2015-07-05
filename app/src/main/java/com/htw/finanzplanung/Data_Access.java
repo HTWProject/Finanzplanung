@@ -83,7 +83,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "(" +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
                         "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
-                        "  PRIMARY KEY(user_id,gruppe_id)" +
+                        "  PRIMARY KEY(user_id,gruppe_id) " +
                         ")"
         );
         db.execSQL("PRAGMA foreign_keys = ON;");
@@ -292,7 +292,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         Integer zwisch = -1;
         if(user_id.equals(getGruppenMasterID(gruppen_id))){
-            db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + mitglied_id + " AND gruppen_id = " + gruppen_id + " ");
+            db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + mitglied_id + " AND gruppe_id = " + gruppen_id + " ");
             zwisch = 0;
         }
 
@@ -301,22 +301,85 @@ public class Data_Access extends SQLiteOpenHelper{
     }
 
     public void addGruppenMitglied(Integer gruppen_id, Integer mitglied_id){
-        Integer user_id = getLoginState();
+        //Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
 
         //datum TEXT as strings ("YYYY-MM-DD").
         db.execSQL("INSERT INTO user_ist_mitglied_in_gruppe ( user_id, gruppe_id) " +
                 "VALUES (" +
-                "  " + user_id + " , " +
+                "  " + mitglied_id + " , " +
                 "  " + gruppen_id + "   " +
                 ") ");
         db.close();
     }
 
-    public void addGruppenMitglied(Integer gruppen_id, String email){
-        Integer user_id = getLoginState();
+    public Integer existUser(String email){
+        Integer id = -10;
+
         SQLiteDatabase db = this.getWritableDatabase();
 
+
+        Cursor c = db.rawQuery(
+                "SELECT _id " +
+                        "FROM user " +
+                        "WHERE email = '" + email + "' ", null
+        );
+
+
+        if(c.moveToFirst()){
+                id = c.getInt(0);
+        }
+        c.close();
+
+        return id;
+
+    }
+
+    public Boolean existUserInGruppe(String email, Integer gruppe_id){
+        //zwisch = -10;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        Cursor c = db.rawQuery(
+                "SELECT _id " +
+                        "FROM user " +
+                        "WHERE email = '" + email + "' ", null
+        );
+
+
+        if(c.moveToFirst()){
+            //id = c.getInt(0);
+            c.close();
+            return true;
+
+        }else{
+            c.close();
+            return false;
+        }
+
+    }
+
+
+    public String addGruppenMitglied(Integer gruppen_id, String email){
+        Integer user_id = getLoginState();
+        //SQLiteDatabase db = this.getWritableDatabase();
+
+        Log.d("Response1: ", "> " + existUser(email));
+        if(existUser(email).equals(-10)) {
+            Log.d("Response2: ", "> " + "add User" + email);
+            //addUser(email+" noSync",email,"00000");
+            return "user existiert nicht";
+        }else if(existUser(email).equals(user_id)){
+            return "user vorhanden";
+        } else {
+            Log.d("Response3: ", "> " + existUser(email));
+            addGruppenMitglied(gruppen_id, existUser(email));
+            Log.d("Response4: ", "> " + "nice");
+            return "OK";
+        }
+
+        /*
         String url = "http://home.htw-berlin.de/~s0539589/Finanzplanung/usersearch.php";
 
         ServiceHandler sh = new ServiceHandler();
@@ -366,7 +429,8 @@ public class Data_Access extends SQLiteOpenHelper{
 
         }
         sh.destroy();
-        db.close();
+        */
+        //db.close();
     }
 
     //Home
@@ -401,7 +465,7 @@ public class Data_Access extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppen_id = " + gruppen_id + ");");
+        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppe_id = " + gruppen_id + ");");
 
         db.close();
     }
@@ -475,7 +539,7 @@ public class Data_Access extends SQLiteOpenHelper{
                 "SELECT _id " +
                         "FROM user " +
                         "WHERE email = " + email + " " +
-                        "AND passwort = "+passwort+" ", null
+                        "AND passwort = " + passwort + " ", null
         );
 
         if(c.moveToFirst()){
@@ -655,6 +719,21 @@ public class Data_Access extends SQLiteOpenHelper{
                 " '" + name + "', " +
                 " '" + email + "', " +
                 " '" + passwort + "'  " +
+                ");");
+
+        return 0;
+    }
+
+    public int addUser(String name, String email, String passwort){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //datum TEXT as strings ("YYYY-MM-DD").
+        db.execSQL("INSERT INTO user (name, email, passwort, loginstatus) " +
+                "VALUES (" +
+                " '" + name + "', " +
+                " '" + email + "', " +
+                " '" + passwort + "', " +
+                " 0 " +
                 ");");
 
         return 0;
