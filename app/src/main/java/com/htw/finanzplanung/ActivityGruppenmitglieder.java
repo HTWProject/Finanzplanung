@@ -24,7 +24,7 @@ public class ActivityGruppenmitglieder extends AppCompatActivity {
 
     // Anlegen der Variabeln
     EditText inputMitglied;
-    public Data_Access dataAccess = new Data_Access(this);
+    Data_Access dataAccess = new Data_Access(this);
 
     private ListView numberList;
     MyThumbnailAdapter thadapter = null;

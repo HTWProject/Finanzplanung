@@ -25,13 +25,17 @@ import java.util.List;
 
 public class Data_Access extends SQLiteOpenHelper{
 
+    SQLiteDatabase db;
+
     private static final String DATABASE_NAME = "Finanzplanung.sqlite";
 
     public Data_Access(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        //SQLiteDatabase db = this.getWritableDatabase();
+        //this.db = this.getWritableDatabase();
     }
-
+    //public void close() {
+      //  this.db.close();
+    //}
     public void databaseDelete(Context context){
         context.deleteDatabase(DATABASE_NAME);
     }
@@ -335,16 +339,19 @@ public class Data_Access extends SQLiteOpenHelper{
 
     }
 
-    public Boolean existUserInGruppe(String email, Integer gruppe_id){
+    public Boolean existUserInGruppe(String email, Integer gruppen_id){
         //zwisch = -10;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
 
         Cursor c = db.rawQuery(
-                "SELECT _id " +
+                "SELECT user._id " +
                         "FROM user " +
-                        "WHERE email = '" + email + "' ", null
+                        "INNER JOIN user_ist_mitglied_in_gruppe " +
+                        "ON user_ist_mitglied_in_gruppe.user_id = user._id " +
+                        "WHERE user.email = '" + email + "' " +
+                        "AND  user_ist_mitglied_in_gruppe.gruppe_id = '"+gruppen_id+"' ", null
         );
 
 
@@ -597,7 +604,6 @@ public class Data_Access extends SQLiteOpenHelper{
 
 
         db.close();
-
     }
 
 
@@ -720,6 +726,10 @@ public class Data_Access extends SQLiteOpenHelper{
                 " '" + email + "', " +
                 " '" + passwort + "'  " +
                 ");");
+        db.execSQL("INSERT INTO settings (user_id) " +
+                "VALUES (" +
+                "  " + user_id + " " +
+                ");");
 
         return 0;
     }
@@ -759,8 +769,8 @@ public class Data_Access extends SQLiteOpenHelper{
         Cursor c = db.rawQuery(
                 "SELECT * " +
                         "FROM user " +
-                        "WHERE user_id = " + user_id + " " +
-                        " AND passwort = " + passwort + " ", null
+                        "WHERE _id = " + user_id + " " +
+                        " AND passwort = '" + passwort + "' ", null
         );
 
         if(c.moveToFirst()){
@@ -789,20 +799,64 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         if(validation(passwort)){
-            db.execSQL("UPDATE setting SET server = '" + newServer + "' WHERE user_id = " + user_id + ";");
+            db.execSQL("UPDATE settings SET server = '" + newServer + "' WHERE user_id = " + user_id + ";");
         }
 
         db.close();
         return 0;
 
     }
+
+    public String getServer(){
+        Integer user_id = getLoginState();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String server = "nix";
+
+        Cursor c = db.rawQuery(
+                "SELECT server " +
+                        "FROM settings " +
+                        "WHERE user_id = " + user_id + " ", null
+        );
+
+        if(c.moveToFirst()){
+            server= c.getString(0);
+        }
+
+        c.close();
+        db.close();
+        return server;
+
+    }
+    public String getName(){
+        Integer user_id = getLoginState();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String name = "nix";
+
+        Cursor c = db.rawQuery(
+                "SELECT name " +
+                        "FROM user " +
+                        "WHERE _id = " + user_id + " ", null
+        );
+
+        if(c.moveToFirst()){
+            name = c.getString(0);
+        }
+
+        c.close();
+        db.close();
+        return name;
+
+    }
+
     public void setMobileSync(Boolean mobileSync, String passwort){
         Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
 
-        if(validation(passwort)){
-            db.execSQL("UPDATE setting SET mobile_sync = " + (mobileSync ? 1 : 0) + " WHERE user_id = " + user_id + ";");
-        }
+        //if(validation(passwort)){
+            db.execSQL("UPDATE settings SET mobile_sync = " + (mobileSync ? 1 : 0) + " WHERE user_id = " + user_id + ";");
+        //}
         db.close();
     }
     public Boolean getMobileSyncStatus(){

@@ -47,6 +47,13 @@
                     android:text="@string/newPasswort"
                     android:id="@+id/textView9"
                     android:textColor="#808080"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="47dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/oldpasswort"
+                    android:id="@+id/textView9"
+                    android:textColor="#808080"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -72,7 +79,7 @@
                 <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/cb_wlan"
+                    android:id="@+id/cb_mobilSync"
                     android:layout_gravity="right"
                     android:backgroundTint="#808080"
                     android:background="#808080"
@@ -81,7 +88,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText"
+                    android:id="@+id/Server"
                     android:textColor="#808080"
                     android:backgroundTint="#808080"/>
 
@@ -90,7 +97,15 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:ems="10"
-                    android:id="@+id/passwort"
+                    android:id="@+id/newPasswort"
+                    android:textColor="#808080"
+                    android:backgroundTint="#808080"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/Passwort"
                     android:textColor="#808080"
                     android:backgroundTint="#808080"/>
 
@@ -99,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:ems="10"
-                    android:id="@+id/name"
+                    android:id="@+id/user_name"
                     android:textColor="#808080"
                     android:backgroundTint="#808080"/>
             </LinearLayout>

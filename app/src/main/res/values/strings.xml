@@ -11,6 +11,7 @@
     <string name="name">Name</string>
     <string name="email">eMail</string>
     <string name="passwort">Passwort</string>
+    <string name="oldpasswort">Altes Passwort</string>
     <string name="passwortValidation">Passwort wiederhollen</string>
     <string name="bt_ok">OK</string>
     <string name="title_activity_activity_home">ActivityHome</string>
