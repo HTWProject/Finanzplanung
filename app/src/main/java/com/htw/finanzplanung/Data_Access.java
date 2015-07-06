@@ -370,7 +370,7 @@ public class Data_Access extends SQLiteOpenHelper{
             Log.d("Response2: ", "> " + "add User" + email);
             //addUser(email+" noSync",email,"00000");
             return "user existiert nicht";
-        }else if(existUser(email).equals(user_id)){
+        }else if(existUserInGruppe(email,gruppen_id)){
             return "user vorhanden";
         } else {
             Log.d("Response3: ", "> " + existUser(email));
