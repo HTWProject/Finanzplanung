@@ -1,5 +1,6 @@
 package com.htw.finanzplanung;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-public class ActivitySettings extends AppCompatActivity {
+public class ActivitySettings extends Activity {
 
     // Anlegen der Variabeln
     EditText inputServer;
@@ -19,14 +20,14 @@ public class ActivitySettings extends AppCompatActivity {
     EditText inputNewPasswort;
     EditText inputOldPasswort;
     CheckBox inputCheckbox;
-    Button settingsButton;
+    Button settingsSaveButton;
 
     Data_Access dataAccess = new Data_Access(this);
 
     public void addListenerOnChkIos() {
 
         inputCheckbox = (CheckBox) findViewById(R.id.cb_mobilSync);
-        settingsButton = (Button) findViewById(R.id.bt_save);
+        settingsSaveButton = (Button) findViewById(R.id.bt_save);
         inputName = (EditText) findViewById(R.id.user_name);
         inputNewPasswort = (EditText) findViewById(R.id.newPasswort);
         inputOldPasswort = (EditText) findViewById(R.id.Passwort);
@@ -56,7 +57,7 @@ public class ActivitySettings extends AppCompatActivity {
 
             }
         });
-        settingsButton.setOnClickListener(new View.OnClickListener() {
+        settingsSaveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

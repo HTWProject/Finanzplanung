@@ -20,7 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class ActivityGruppenverwaltung extends AppCompatActivity {
+public class ActivityGruppenverwaltung extends Activity {
 
     // Anlegen der Variabeln
     EditText inputGruppenName;

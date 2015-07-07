@@ -1,5 +1,6 @@
 package com.htw.finanzplanung;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-public class ActivityRegistration extends AppCompatActivity {
+public class ActivityRegistration extends Activity {
 
     // Anlegen der Variabeln
     EditText inputName;

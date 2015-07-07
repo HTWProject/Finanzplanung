@@ -1,5 +1,6 @@
 package com.htw.finanzplanung;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,13 +19,71 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class ActivityHome extends AppCompatActivity {
+public class ActivityHome extends Activity {
     // Anlegen der Variabeln
     Data_Access dataAccess = new Data_Access(this);
 
     private ListView numberList;
     MyThumbnailAdapter thadapter = null;
     ArrayList<Gruppe> meineGruppen;
+/*
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Toast.makeText(getApplicationContext(), "onStart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Toast.makeText(getApplicationContext(), "onRestart", Toast.LENGTH_SHORT).show();
+    }
+*/
+
+    int backButtonCount = 0;
+
+    public void onBackPressed()
+    {
+
+        if(backButtonCount >= 1)
+        {
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            android.os.Process.killProcess(android.os.Process.myPid());
+            //ActivityHome.this.finish();
+        }
+        else
+        {
+            Toast.makeText(this, "Press the back button once again to close the application.", Toast.LENGTH_SHORT).show();
+            backButtonCount++;
+        }
+    }
+    /*
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+    */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Toast.makeText(getApplicationContext(), "onResume", Toast.LENGTH_SHORT).show();
+        meineGruppen = dataAccess.getGruppen();
+
+
+        numberList = (ListView) findViewById(R.id.listViewGruppen);
+
+
+        thadapter = new MyThumbnailAdapter(getApplicationContext(), R.layout.list_row, meineGruppen);
+        numberList.setAdapter(thadapter);
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +91,21 @@ public class ActivityHome extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
 
-        Button settingsButton = (Button) findViewById(R.id.bt_settings);
+        //Button settingsButton = (Button) findViewById(R.id.bt_settings);
         Button gruppenverwaltungButton = (Button) findViewById(R.id.bt_gruppen);
         //Button logoutButton = (Button) findViewById(R.id.bt_logout);
 
+
+/*
         // ClickListener implementieren für den Button zum Wechsel der Activity
         settingsButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                //Neues Intent anlegen
-                Intent nextScreen = new Intent(getApplicationContext(), ActivitySettings.class);
-                // Intent starten und zur zweiten Activity wechseln
-                startActivity(nextScreen);
+
 
             }
         });
-
+*/
         meineGruppen = dataAccess.getGruppen();
 
 
@@ -104,6 +162,10 @@ public class ActivityHome extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //Neues Intent anlegen
+            Intent nextScreen = new Intent(getApplicationContext(), ActivitySettings.class);
+            // Intent starten und zur zweiten Activity wechseln
+            startActivity(nextScreen);
             return true;
         }
         if (id == R.id.logout) {
@@ -131,6 +193,9 @@ public class ActivityHome extends AppCompatActivity {
             this.arr = objects;
             this.context = context;
         }
+
+
+
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {

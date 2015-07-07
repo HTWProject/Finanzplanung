@@ -1,5 +1,6 @@
 package com.htw.finanzplanung;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class ActivityGruppenmitglieder extends AppCompatActivity {
+public class ActivityGruppenmitglieder extends Activity {
 
 
     // Anlegen der Variabeln
