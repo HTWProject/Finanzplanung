@@ -12,24 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Gruppenverwaltung"
-                    android:id="@+id/bt_gruppen" />
-            </LinearLayout>
-
-        </LinearLayout>
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Gruppenverwaltung"
+            android:id="@+id/bt_gruppen" />
 
         <ListView
             android:layout_width="wrap_content"
