@@ -11,6 +11,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true" android:focusableInTouchMode="true"
         android:weightSum="1">
 
         <LinearLayout
@@ -24,19 +25,20 @@
                 android:layout_height="wrap_content"
                 android:inputType="date"
                 android:ems="10"
-                android:id="@+id/Datum"
-                android:layout_weight="0.29"
+                android:id="@+id/txt_Datum"
+                android:layout_weight="0.20"
                 android:hint="Datum"
                 android:textColorHint="#808080"
                 android:textColor="#808080"
-                android:backgroundTint="#808080"/>
+                android:backgroundTint="#808080" />
+
 
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/Was"
+                android:id="@+id/txt_Was"
                 android:inputType="text"
-                android:layout_weight="0.81"
+                android:layout_weight="0.5"
                 android:hint="Was"
                 android:textColorHint="#808080"
                 android:textColor="#808080"
@@ -47,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:ems="10"
-                android:id="@+id/Betrag"
+                android:id="@+id/txt_Betrag"
                 android:layout_weight="0.00"
                 android:hint="€"
                 android:textColorHint="#808080"
@@ -58,14 +60,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bt_addBetrag"
+                android:layout_weight="0.30"
                 android:id="@+id/bt_addBetrag" />
 
         </LinearLayout>
+
+
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom = "50dp"
+            android:weightSum="1">
+
+                <ExpandableListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/expandableListViewMitgliederAusgaben"
+                    android:textColor="#808080"/>
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop = "-50dp"
             android:weightSum="1">
 
             <EditText
@@ -73,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="date"
                 android:ems="10"
-                android:id="@+id/DatumVon"
+                android:id="@+id/txt_DatumVon"
                 android:layout_weight="0.40"
                 android:hint="von"
                 android:textColorHint="#808080"
@@ -85,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="date"
                 android:ems="10"
-                android:id="@+id/DatumBis"
+                android:id="@+id/txt_DatumBis"
                 android:layout_weight="0.45"
                 android:hint="bis"
                 android:textColorHint="#808080"
@@ -114,11 +134,7 @@
 
         </LinearLayout>
 
-        <ExpandableListView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/expandableListView"
-            android:textColor="#808080"/>
+
 
     </LinearLayout>
 </RelativeLayout>

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-//import static com.htw.finanzplanung.DBNames.*;
+
 
 //datum TEXT as strings ("YYYY-MM-DD").
 
