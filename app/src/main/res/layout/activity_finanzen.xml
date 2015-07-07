@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:ems="10"
-                android:id="@+id/gesamtBetrag"
+                android:id="@+id/txt_gesamtBetrag"
                 android:hint="€"
                 android:textColorHint="#808080"
                 android:textColor="#808080"

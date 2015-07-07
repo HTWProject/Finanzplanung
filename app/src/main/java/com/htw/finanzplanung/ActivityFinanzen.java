@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class ActivityFinanzen extends Activity {
     private TextView text_date;
     private TextView was;
     private TextView geldbetrag;
+    private TextView geldgesamtbetrag;
     private TextView text_date_von;
     private TextView text_date_bis;
     private int year;
@@ -64,6 +66,7 @@ public class ActivityFinanzen extends Activity {
 
         was = (TextView) findViewById(R.id.txt_Was);
         geldbetrag = (TextView) findViewById(R.id.txt_Betrag);
+        geldgesamtbetrag = (TextView) findViewById(R.id.txt_gesamtBetrag);
 
         final Calendar calendar = Calendar.getInstance();
 
@@ -74,29 +77,30 @@ public class ActivityFinanzen extends Activity {
         // set current date into textview
         text_date.setText(new StringBuilder()
                 // Month is 0 based, so you have to add 1
-                .append(year).append("-")
-                .append(month + 1).append("-")
-                .append(day).append("")
-                );
+                .append(new DecimalFormat("0000").format(year)).append("-")
+                .append(new DecimalFormat("00").format(month + 1)).append("-")
+                .append(new DecimalFormat("00").format(day)).append("")
+        );
 
         text_date_von.setText(new StringBuilder()
                         // Month is 0 based, so you have to add 1
-                        .append(year).append("-")
-                        .append(month).append("-")
-                        .append(day).append("")
+                        .append(new DecimalFormat("0000").format(year)).append("-")
+                        .append(new DecimalFormat("00").format(month)).append("-")
+                        .append(new DecimalFormat("00").format(day)).append("")
         );
 
         text_date_bis.setText(new StringBuilder()
                         // Month is 0 based, so you have to add 1
-                        .append(year).append("-")
-                        .append(month + 1).append("-")
-                        .append(day).append("")
+                        .append(new DecimalFormat("0000").format(year)).append("-")
+                        .append(new DecimalFormat("00").format(month + 1)).append("-")
+                        .append(new DecimalFormat("00").format(day)).append("")
         );
 
 
 
         Button addBetragButton = (Button) findViewById(R.id.bt_addBetrag);
 
+        updateGesamtBeträge();
 
 
         text_date.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +162,8 @@ public class ActivityFinanzen extends Activity {
 
             @Override
             public void onClick(View v) {
-               // dataAccess.addGeldausgabe(text_date.getText().toString(),,text_date.get,gruppenID)
+                dataAccess.addGeldausgabe(text_date.getText().toString(), was.getText().toString(), Float.valueOf(geldbetrag.getText().toString()), gruppenID);
+                updateGesamtBeträge();
 
             }
         });
@@ -237,7 +242,9 @@ public class ActivityFinanzen extends Activity {
 
 
     }
-
+    public void updateGesamtBeträge(){
+            geldgesamtbetrag.setText(dataAccess.getGruppenGesamtbetrag(text_date_von.getText().toString(),text_date_bis.getText().toString(),gruppenID)+" €");
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -328,7 +335,7 @@ public class ActivityFinanzen extends Activity {
             day = selectedDay;
 
             // set selected date into Text View
-            text_date.setText(new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day).append(""));
+            text_date.setText(new StringBuilder().append(new DecimalFormat("0000").format(year)).append("-").append(new DecimalFormat("00").format(month + 1)).append("-").append(new DecimalFormat("00").format(day)).append(""));
 
 
         }
@@ -343,9 +350,9 @@ public class ActivityFinanzen extends Activity {
             day = selectedDay;
 
             // set selected date into Text View
-            text_date_von.setText(new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day).append(""));
+            text_date_von.setText(new StringBuilder().append(new DecimalFormat("0000").format(year)).append("-").append(new DecimalFormat("00").format(month + 1)).append("-").append(new DecimalFormat("00").format(day)).append(""));
 
-
+            updateGesamtBeträge();
         }
     };
 
@@ -358,9 +365,9 @@ public class ActivityFinanzen extends Activity {
             day = selectedDay;
 
             // set selected date into Text View
-            text_date_bis.setText(new StringBuilder().append(year).append("-").append(month + 1).append("-").append(day).append(""));
+            text_date_bis.setText(new StringBuilder().append(new DecimalFormat("0000").format(year)).append("-").append(new DecimalFormat("00").format(month + 1)).append("-").append(new DecimalFormat("00").format(day)).append(""));
 
-
+            updateGesamtBeträge();
         }
     };
 

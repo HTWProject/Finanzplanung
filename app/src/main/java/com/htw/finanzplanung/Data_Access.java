@@ -75,7 +75,7 @@ public class Data_Access extends SQLiteOpenHelper{
         db.execSQL("CREATE TABLE IF NOT EXISTS ausgabe " +
                         "(" +
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "  datum TEXT" +
+                        "  datum TEXT," +
                         "  was TEXT," +
                         "  betrag REAL," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
@@ -185,7 +185,6 @@ public class Data_Access extends SQLiteOpenHelper{
     public int addGeldausgabe(String datum,String was, Float betrag, Integer gruppen_id){
         Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
-
         //datum TEXT as strings ("YYYY-MM-DD").
         db.execSQL("INSERT INTO ausgabe  (datum, was, betrag, user_id, gruppe_id) " +
                 "VALUES (" +
@@ -203,19 +202,20 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor c = db.rawQuery(
-                "SELECT sum(geldbetrag) AS Summe " +
+                "SELECT sum(betrag) AS Summe " +
                         "FROM ausgabe " +
                         "WHERE gruppe_id = " + gruppen_id + " " +
-                        "AND Date(ausgabe.datum) BETWEEN Date('" + startdatum + "') AND Date('" + enddatum + "')" +
-                        "GROUP BY gruppe_id ;", null
+                        "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' " +
+                        "GROUP BY gruppe_id ", null
         );
+
         Float gesamtgeldbetrag = 0f;
         if(c.moveToFirst()){
             gesamtgeldbetrag = c.getFloat(0);
         }
         c.close();
         db.close();
-
+        Log.d("Response betrag: ", "> " + gesamtgeldbetrag);
         return gesamtgeldbetrag;
     }
 
@@ -223,7 +223,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor c = db.rawQuery(
-                "SELECT sum(ausgabe.geldbetrag) AS Summe " +
+                "SELECT sum(ausgabe.betrag) AS Summe " +
                         "FROM ausgabe " +
                         "INNER JOIN user_ist_mitglied_in_gruppe " +
                         "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
