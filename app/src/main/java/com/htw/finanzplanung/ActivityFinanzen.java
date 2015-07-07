@@ -3,6 +3,7 @@ package com.htw.finanzplanung;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,30 +27,18 @@ import java.util.List;
 public class ActivityFinanzen extends Activity {
 
     // Anlegen der Variabeln
-    private TextView text_date;
-    private TextView was;
-    private TextView geldbetrag;
-    private TextView geldgesamtbetrag;
-    private TextView text_date_von;
-    private TextView text_date_bis;
+    private EditText text_date;
+    private EditText was;
+    private EditText geldbetrag;
+    private EditText geldgesamtbetrag;
+    private EditText text_date_von;
+    private EditText text_date_bis;
     private int year;
     private int month;
     private int day;
     static final int DATE_DIALOG_ID = 100;
     static final int DATE_DIALOG_ID_von = 101;
     static final int DATE_DIALOG_ID_bis = 102;
-
-    EditText inputGeldausgabe;
-    Data_Access dataAccess = new Data_Access(this);
-
-    private ListView numberList;
-    ArrayList<Geldausgabe> meineGeldausgabe;
-    Integer gruppenID;
-
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
 
 
     @Override
@@ -60,13 +49,16 @@ public class ActivityFinanzen extends Activity {
         gruppenID = getIntent().getIntExtra( "GruppenId", 0);
         Log.d("ResponseGruppe: ", "> " + gruppenID);
 
-        text_date = (TextView) findViewById(R.id.txt_Datum);
-        text_date_von = (TextView) findViewById(R.id.txt_DatumVon);
-        text_date_bis = (TextView) findViewById(R.id.txt_DatumBis);
+        text_date = (EditText) findViewById(R.id.txt_Datum);
+        text_date_von = (EditText) findViewById(R.id.txt_DatumVon);
+        text_date_bis = (EditText) findViewById(R.id.txt_DatumBis);
+        disableEditText(text_date);
+        disableEditText(text_date_von);
+        disableEditText(text_date_bis);
 
-        was = (TextView) findViewById(R.id.txt_Was);
-        geldbetrag = (TextView) findViewById(R.id.txt_Betrag);
-        geldgesamtbetrag = (TextView) findViewById(R.id.txt_gesamtBetrag);
+        was = (EditText) findViewById(R.id.txt_Was);
+        geldbetrag = (EditText) findViewById(R.id.txt_Betrag);
+        geldgesamtbetrag = (EditText) findViewById(R.id.txt_gesamtBetrag);
 
         final Calendar calendar = Calendar.getInstance();
 
@@ -76,10 +68,10 @@ public class ActivityFinanzen extends Activity {
 
         // set current date into textview
         text_date.setText(new StringBuilder()
-                // Month is 0 based, so you have to add 1
-                .append(new DecimalFormat("0000").format(year)).append("-")
-                .append(new DecimalFormat("00").format(month + 1)).append("-")
-                .append(new DecimalFormat("00").format(day)).append("")
+                        // Month is 0 based, so you have to add 1
+                        .append(new DecimalFormat("0000").format(year)).append("-")
+                        .append(new DecimalFormat("00").format(month + 1)).append("-")
+                        .append(new DecimalFormat("00").format(day)).append("")
         );
 
         text_date_von.setText(new StringBuilder()
@@ -100,7 +92,17 @@ public class ActivityFinanzen extends Activity {
 
         Button addBetragButton = (Button) findViewById(R.id.bt_addBetrag);
 
-        updateGesamtBeträge();
+
+        // get the listview
+        expListView = (ExpandableListView) findViewById(R.id.expandableListViewMitgliederAusgaben);
+
+        // preparing list data
+
+        //prepareListData();
+        listDataChild = new HashMap<Mitglied, ArrayList<Geldausgabe>>();
+        listDataHeader = new ArrayList<Mitglied>();
+
+        updateListe();
 
 
         text_date.setOnClickListener(new View.OnClickListener() {
@@ -163,35 +165,10 @@ public class ActivityFinanzen extends Activity {
             @Override
             public void onClick(View v) {
                 dataAccess.addGeldausgabe(text_date.getText().toString(), was.getText().toString(), Float.valueOf(geldbetrag.getText().toString()), gruppenID);
-                updateGesamtBeträge();
+                updateListe();
 
             }
         });
-        //Toast.makeText(getApplicationContext(), dp.getDayOfMonth() + " " + dp.getMonth() + " " + dp.getYear(), Toast.LENGTH_SHORT).show();
-
-/*
-        addBetragButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), dp.getDayOfMonth() + " " + dp.getMonth() + " " + dp.getYear(),  Toast.LENGTH_SHORT).show();
-
-            }
-        });
-*/
-
-
-        // get the listview
-        expListView = (ExpandableListView) findViewById(R.id.expandableListViewMitgliederAusgaben);
-
-        // preparing list data
-        prepareListData();
-
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
-
 
 
 
@@ -206,11 +183,9 @@ public class ActivityFinanzen extends Activity {
                                         int groupPosition, int childPosition, long id) {
                 Toast.makeText(
                         getApplicationContext(),
-                        listDataHeader.get(groupPosition)
+                        listDataHeader.get(groupPosition).getName()
                                 + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
+                                + listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition).toString(), Toast.LENGTH_SHORT)
                         .show();
                 return false;
             }
@@ -222,7 +197,7 @@ public class ActivityFinanzen extends Activity {
             @Override
             public void onGroupExpand(int groupPosition) {
                 Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
+                        listDataHeader.get(groupPosition).getName() + " Expanded",
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -233,7 +208,7 @@ public class ActivityFinanzen extends Activity {
             @Override
             public void onGroupCollapse(int groupPosition) {
                 Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Collapsed",
+                        listDataHeader.get(groupPosition).getName() + " Collapsed",
                         Toast.LENGTH_SHORT).show();
 
             }
@@ -242,8 +217,32 @@ public class ActivityFinanzen extends Activity {
 
 
     }
-    public void updateGesamtBeträge(){
-            geldgesamtbetrag.setText(dataAccess.getGruppenGesamtbetrag(text_date_von.getText().toString(),text_date_bis.getText().toString(),gruppenID)+" €");
+
+    Data_Access dataAccess = new Data_Access(this);
+
+    Integer gruppenID;
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expListView;
+    ArrayList<Mitglied> listDataHeader;
+
+    HashMap<Mitglied, ArrayList<Geldausgabe>> listDataChild;
+    public void updateListe(){
+        geldgesamtbetrag.setText(dataAccess.getGruppenGesamtbetrag(text_date_von.getText().toString(),text_date_bis.getText().toString(),gruppenID)+" €");
+        listDataHeader = dataAccess.getGruppenMitglieder(gruppenID);
+        Log.d("Response1: ", "> " + listDataHeader.get(0).toString());
+        Log.d("Response1: ", "> " + listDataHeader.size());
+
+        for(int x = 0; x < listDataHeader.size();x++) {
+            Log.d("Response2: ", "> " + x);
+            listDataChild.put(listDataHeader.get(x),dataAccess.getUserGeldausgaben(text_date_von.getText().toString(),text_date_bis.getText().toString(),gruppenID,listDataHeader.get(x).getDbId()));
+
+        }
+        Log.d("Response3: ", "> " + listDataChild.size());
+        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild, text_date_von.getText().toString(),text_date_bis.getText().toString(),gruppenID);
+        Log.d("Response4: ", "> " + "OK");
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
+        Log.d("Response5: ", "> " + "Nice");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -265,47 +264,6 @@ public class ActivityFinanzen extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-
-    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-
-        // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
-
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
-
-        List<String> nowShowing = new ArrayList<String>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
-
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
-
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
     }
 
 
@@ -352,7 +310,7 @@ public class ActivityFinanzen extends Activity {
             // set selected date into Text View
             text_date_von.setText(new StringBuilder().append(new DecimalFormat("0000").format(year)).append("-").append(new DecimalFormat("00").format(month + 1)).append("-").append(new DecimalFormat("00").format(day)).append(""));
 
-            updateGesamtBeträge();
+            updateListe();
         }
     };
 
@@ -367,9 +325,17 @@ public class ActivityFinanzen extends Activity {
             // set selected date into Text View
             text_date_bis.setText(new StringBuilder().append(new DecimalFormat("0000").format(year)).append("-").append(new DecimalFormat("00").format(month + 1)).append("-").append(new DecimalFormat("00").format(day)).append(""));
 
-            updateGesamtBeträge();
+            updateListe();
         }
     };
 
+
+    private void disableEditText(EditText editText) {
+        //editText.setFocusable(false);
+        //editText.setEnabled(false);
+        editText.setCursorVisible(false);
+        editText.setKeyListener(null);
+        //editText.setBackgroundColor(Color.TRANSPARENT);
+    }
 
 }

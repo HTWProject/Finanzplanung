@@ -229,7 +229,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
                         "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
                         "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
-                        "AND Date(ausgabe.datum) BETWEEN Date('" + startdatum + "') AND Date('" + enddatum + "') " +
+                        "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' " +
                         "GROUP BY ausgabe.gruppe_id ;", null
         );
         Float gesamtgeldbetrag = 0f;
@@ -253,7 +253,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
                 "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
                         "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
-                        "AND Date(ausgabe.datum) BETWEEN Date('" + startdatum + "') AND Date('" + enddatum + "') ", null
+                        "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null
         );
 
         if(c.moveToFirst()){
@@ -472,7 +472,7 @@ public class Data_Access extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppe_id = " + gruppen_id + ");");
+        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppe_id = " + gruppen_id + " );");
 
         db.close();
     }
