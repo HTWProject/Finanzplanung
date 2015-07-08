@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ActivityFinanzen extends Activity {
+public class ActivityFinanzen extends AppCompatActivity {
 
     // Anlegen der Variabeln
     private EditText text_date;
