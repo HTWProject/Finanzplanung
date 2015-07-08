@@ -19,7 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class ActivityHome extends Activity {
+public class ActivityHome extends AppCompatActivity {
     // Anlegen der Variabeln
     Data_Access dataAccess = new Data_Access(this);
 

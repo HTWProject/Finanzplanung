@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-public class ActivitySettings extends Activity {
+public class ActivitySettings extends AppCompatActivity {
 
     // Anlegen der Variabeln
     EditText inputServer;

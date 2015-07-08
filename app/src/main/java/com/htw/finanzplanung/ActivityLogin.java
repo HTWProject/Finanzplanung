@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-public class ActivityLogin extends Activity{
+public class ActivityLogin extends AppCompatActivity{
 
     // Anlegen der Variabeln
     EditText inputEmail;

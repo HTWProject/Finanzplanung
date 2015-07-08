@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-public class ActivityRegistration extends Activity {
+public class ActivityRegistration extends AppCompatActivity {
 
     // Anlegen der Variabeln
     EditText inputName;

@@ -157,7 +157,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL("INSERT INTO gruppe (name, user_id) VALUES ('" + gruppenname + "' , " + user_id + ");");
-        db.close();
+
         return 0;
     }
 

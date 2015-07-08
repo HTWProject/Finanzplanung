@@ -20,7 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class ActivityGruppenmitglieder extends Activity {
+public class ActivityGruppenmitglieder extends AppCompatActivity {
 
 
     // Anlegen der Variabeln
