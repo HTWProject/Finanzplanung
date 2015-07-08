@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ActivityGruppenverwaltung extends AppCompatActivity {
@@ -28,7 +29,7 @@ public class ActivityGruppenverwaltung extends AppCompatActivity {
 
     private ListView numberList;
     MyThumbnailAdapter thadapter = null;
-    ArrayList<Gruppe> meineGruppen;
+    List<Gruppe> meineGruppen;
     //int number_count = 1;
 
     @Override
@@ -105,10 +106,10 @@ public class ActivityGruppenverwaltung extends AppCompatActivity {
 
     public class MyThumbnailAdapter extends ArrayAdapter<Gruppe> {
         Data_Access dataAccess2;
-        ArrayList<Gruppe> arr;
+        List<Gruppe> arr;
         //private TextView text;
 
-        public MyThumbnailAdapter(Context context, int textViewResourceId, ArrayList<Gruppe> objects) {
+        public MyThumbnailAdapter(Context context, int textViewResourceId, List<Gruppe> objects) {
 
             super(context, textViewResourceId, objects);
             dataAccess2 = new Data_Access(context);

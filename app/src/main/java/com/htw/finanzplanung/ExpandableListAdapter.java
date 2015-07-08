@@ -1,11 +1,15 @@
 package com.htw.finanzplanung;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +27,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Data_Access dataAccess;
 
     // child data in format of header title, child title
-    private HashMap<Mitglied, ArrayList<Geldausgabe>> _listDataChild;
+    private HashMap<Mitglied, List<Geldausgabe>> _listDataChild;
 
-    public ExpandableListAdapter(Context context, List<Mitglied> listDataHeader,HashMap<Mitglied, ArrayList<Geldausgabe>> listChildData, String startDatum, String endDatum, Integer gruppenID) {
+    public ExpandableListAdapter(Context context, List<Mitglied> listDataHeader,HashMap<Mitglied, List<Geldausgabe>> listChildData, String startDatum, String endDatum, Integer gruppenID) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -33,10 +37,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this.endDatum = endDatum;
         this.dataAccess = new Data_Access(context);
         this.gruppenID = gruppenID;
+/*
+        Iterator it = listChildData.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            //System.out.println(pair.getKey() + " = " + pair.getValue());
+            Log.d("ResponseHash: ", "> " + "key" + pair.getKey().toString() + " value" + pair.getValue().toString());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+*/
     }
 
     @Override
     public Geldausgabe getChild(int groupPosition, int childPosititon) {
+        Log.d("Response11: ", "> " + "group"+groupPosition+"child"+childPosititon);
         return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
     }
 
@@ -65,10 +79,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         txtListChildDatum.setText(childTextDatum);
         txtListChildWas.setText(childTextWas);
         txtListChildBetrag.setText(childTextBetrag + " €");
+
+        //Log.d("ResponseChild: ", "> " + "group" + groupPosition + "user ID " + getGroup(groupPosition).getDbId()+ " " + childTextDatum + childTextWas);
         return convertView;
     }
 
-    @Override
     public int getChildrenCount(int groupPosition) {
         return this._listDataChild.get(this._listDataHeader.get(groupPosition))
                 .size();
@@ -94,6 +109,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition).getName();
         String userGesamtbetrag = String.valueOf(dataAccess.getUserGesamtbetrag(startDatum,endDatum,gruppenID,getGroup(groupPosition).getDbId()));
+        //Log.d("Response22: ", "> " + "group"+groupPosition+"user ID "+getGroup(groupPosition).getDbId());
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_group, null);

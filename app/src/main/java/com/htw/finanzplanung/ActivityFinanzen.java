@@ -22,7 +22,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public class ActivityFinanzen extends AppCompatActivity {
@@ -100,7 +102,7 @@ public class ActivityFinanzen extends AppCompatActivity {
         // preparing list data
 
         //prepareListData();
-        listDataChild = new HashMap<Mitglied, ArrayList<Geldausgabe>>();
+        listDataChild = new HashMap<Mitglied, List<Geldausgabe>>();
         listDataHeader = new ArrayList<Mitglied>();
 
         updateListe();
@@ -165,8 +167,13 @@ public class ActivityFinanzen extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                dataAccess.addGeldausgabe(text_date.getText().toString(), was.getText().toString(), Float.valueOf(geldbetrag.getText().toString()), gruppenID);
-                updateListe();
+                if(!geldbetrag.getText().toString().isEmpty()){
+                    dataAccess.addGeldausgabe(text_date.getText().toString(), was.getText().toString(), Float.parseFloat(geldbetrag.getText().toString()), gruppenID);
+                    updateListe();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Please Insert a Value", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
@@ -224,26 +231,38 @@ public class ActivityFinanzen extends AppCompatActivity {
     Integer gruppenID;
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
-    ArrayList<Mitglied> listDataHeader;
+    List<Mitglied> listDataHeader;
 
-    HashMap<Mitglied, ArrayList<Geldausgabe>> listDataChild;
+    HashMap<Mitglied, List<Geldausgabe>> listDataChild;
     public void updateListe(){
         geldgesamtbetrag.setText(dataAccess.getGruppenGesamtbetrag(text_date_von.getText().toString(),text_date_bis.getText().toString(),gruppenID)+" €");
         listDataHeader = dataAccess.getGruppenMitglieder(gruppenID);
-        Log.d("Response1: ", "> " + listDataHeader.get(0).toString());
-        Log.d("Response1: ", "> " + listDataHeader.size());
+       // Log.d("Response1: ", "> " + listDataHeader.get(0).toString());
+        //Log.d("Response1: ", "> " + listDataHeader.size());
 
         for(int x = 0; x < listDataHeader.size();x++) {
-            Log.d("Response2: ", "> " + x);
-            listDataChild.put(listDataHeader.get(x),dataAccess.getUserGeldausgaben(text_date_von.getText().toString(),text_date_bis.getText().toString(),gruppenID,listDataHeader.get(x).getDbId()));
-
+           // Log.d("Response2: ", "> " + x);
+           // Log.d("Response2id: ", "> " + listDataHeader.get(x).getDbId());
+            listDataChild.put(listDataHeader.get(x), dataAccess.getUserGeldausgaben(text_date_von.getText().toString(), text_date_bis.getText().toString(), gruppenID, listDataHeader.get(x).getDbId()));
+           // Log.d("Response2: ", "> " +listDataHeader.get(x).toString() + listDataChild.get(listDataHeader.get(x)).get(x).toString() );
         }
-        Log.d("Response3: ", "> " + listDataChild.size());
+
+       // Log.d("Response3: ", "> " + listDataChild.size());
+
+/*
+        Iterator it = listDataChild.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            //System.out.println(pair.getKey() + " = " + pair.getValue());
+           // Log.d("ResponseHash1: ", "> " + "key" + pair.getKey().toString() + " value" + pair.getValue().toString());
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+*/
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild, text_date_von.getText().toString(),text_date_bis.getText().toString(),gruppenID);
-        Log.d("Response4: ", "> " + "OK");
+        //Log.d("Response4: ", "> " + "OK");
         // setting list adapter
         expListView.setAdapter(listAdapter);
-        Log.d("Response5: ", "> " + "Nice");
+       // Log.d("Response5: ", "> " + "Nice");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

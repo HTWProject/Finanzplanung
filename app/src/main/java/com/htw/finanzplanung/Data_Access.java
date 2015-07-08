@@ -107,9 +107,9 @@ public class Data_Access extends SQLiteOpenHelper{
 
     //GruppenVerwalten
 
-    public ArrayList<Gruppe> getMeineGruppen() {
+    public List<Gruppe> getMeineGruppen() {
         Integer user_id = getLoginState();
-        ArrayList<Gruppe> Gruppen = new ArrayList<>();
+        List<Gruppe> Gruppen = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
 
 
@@ -221,7 +221,7 @@ public class Data_Access extends SQLiteOpenHelper{
 
     public Float getUserGesamtbetrag(String startdatum, String enddatum, Integer gruppen_id, Integer user_id){
         SQLiteDatabase db = this.getWritableDatabase();
-
+/*
         Cursor c = db.rawQuery(
                 "SELECT sum(ausgabe.betrag) AS Summe " +
                         "FROM ausgabe " +
@@ -230,8 +230,18 @@ public class Data_Access extends SQLiteOpenHelper{
                         "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
                         "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
                         "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' " +
-                        "GROUP BY ausgabe.gruppe_id ;", null
+                        "GROUP BY user_ist_mitglied_in_gruppe.user_id ;", null
         );
+*/
+        Cursor c = db.rawQuery(
+                "SELECT sum(betrag) AS Summe " +
+                        "FROM ausgabe " +
+                        "WHERE gruppe_id = " + gruppen_id + " " +
+                        "AND user_id = " + user_id + " " +
+                        "AND datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' " +
+                        "GROUP BY user_id ;", null
+        );
+
         Float gesamtgeldbetrag = 0f;
         if(c.moveToFirst()){
             gesamtgeldbetrag = c.getFloat(0);
@@ -242,10 +252,10 @@ public class Data_Access extends SQLiteOpenHelper{
         return gesamtgeldbetrag;
     }
 
-    public ArrayList<Geldausgabe> getUserGeldausgaben(String startdatum, String enddatum, Integer gruppen_id, Integer user_id){
-        ArrayList<Geldausgabe> Ausgaben = new ArrayList<>();
+    public List<Geldausgabe> getUserGeldausgaben(String startdatum, String enddatum, Integer gruppen_id, Integer user_id){
+        List<Geldausgabe> Ausgaben = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
-
+/*
         Cursor c = db.rawQuery(
                 "SELECT ausgabe.* " +
                 "FROM ausgabe " +
@@ -255,10 +265,19 @@ public class Data_Access extends SQLiteOpenHelper{
                         "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
                         "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null
         );
+*/
 
+        Cursor c = db.rawQuery(
+                "SELECT * " +
+                        "FROM ausgabe " +
+                        "WHERE gruppe_id = " + gruppen_id + " " +
+                        "AND user_id = " + user_id + " " +
+                        "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null
+        );
         if(c.moveToFirst()){
             do{
-                Ausgaben.add(new Geldausgabe(c.getInt(0), c.getString(1),c.getString(2),c.getFloat(3)));
+                Ausgaben.add(new Geldausgabe(c.getInt(0), c.getString(1), c.getString(2), c.getFloat(3)));
+                //Log.d("ResponseGeld: ", "> " + c.getInt(0)+c.getString(1)+c.getString(2)+c.getFloat(3)+" grupe" + gruppen_id + " user:"+ user_id );
             }while(c.moveToNext());
         }
         c.close();
@@ -472,7 +491,7 @@ public class Data_Access extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppe_id = " + gruppen_id + " );");
+        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppe_id = " + gruppen_id + " ");
 
         db.close();
     }
