@@ -37,7 +37,7 @@
             android:textColor="#fff9ece5"
             android:text="TextView" />
         <TextView
-            android:id="@+id/nullText"
+            android:id="@+id/nullText6776"
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_weight="0.09"

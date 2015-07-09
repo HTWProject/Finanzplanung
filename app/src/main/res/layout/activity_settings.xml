@@ -53,7 +53,7 @@
                     android:layout_height="47dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/oldpasswort"
-                    android:id="@+id/textView9"
+                    android:id="@+id/textView96776"
                     android:textColor="#808080"/>
 
                 <TextView
