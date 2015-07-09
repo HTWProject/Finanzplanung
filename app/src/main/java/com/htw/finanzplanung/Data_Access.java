@@ -25,18 +25,13 @@ import java.util.List;
 
 public class Data_Access extends SQLiteOpenHelper{
 
-    SQLiteDatabase db;
-
     private static final String DATABASE_NAME = "Finanzplanung.sqlite";
 
     public Data_Access(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        //this.db = this.getWritableDatabase();
     }
-    //public void close() {
-      //  this.db.close();
-    //}
-    public void databaseDelete(Context context){
+
+    public void databasefghfg(Context context){
         context.deleteDatabase(DATABASE_NAME);
     }
 
@@ -50,8 +45,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "  name TEXT," +
                         "  email TEXT UNIQUE," +
                         "  passwort TEXT NOT NULL," +
-                        "  loginstatus INTEGER DEFAULT 1 , " +
-                        "  status TEXT " +
+                        "  loginstatus INTEGER DEFAULT 1 " +
                         ")"
         );
 
@@ -61,7 +55,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "  name TEXT," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE  , " +
-                        "  status TEXT " +
+                        "  status TEXT DEFAULT 'u' " +
                         ")"
         );
 
@@ -71,7 +65,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "  server TEXT DEFAULT 'http://fomenko.eu/Finanzplanung/'," +
                         "  mobile_sync INTEGER DEFAULT 0," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE , " +
-                        "  status TEXT " +
+                        "  status TEXT DEFAULT 'u' " +
                         ")"
         );
 
@@ -83,7 +77,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "  betrag REAL," +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE, " +
                         "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE , " +
-                        "  status TEXT " +
+                        "  status TEXT DEFAULT 'u' " +
                         ")"
         );
 
@@ -91,7 +85,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "(" +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
                         "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE, " +
-                        "  status TEXT, " +
+                        "  status TEXT DEFAULT 'u' , " +
                         "  PRIMARY KEY(user_id,gruppe_id) " +
                         ")"
         );
@@ -118,7 +112,7 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
 
-        Cursor c = db.rawQuery("SELECT _id, name FROM gruppe  WHERE user_id = " + user_id + " ", null);
+        Cursor c = db.rawQuery("SELECT _id, name FROM gruppe  WHERE status != 'd' AND user_id = " + user_id + " ", null);
 
 
         if(c.moveToFirst()){
@@ -137,21 +131,14 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         int zwisch = 0;
         //Log.d("Response Delete: ", "> " + "ready"+user_id);
-        //if (!db.isOpen()) {
-            //Log.d("Response Delete: ", "> " + "DBwhat close");
-        //}
+
         if(user_id.equals(getGruppenMasterID(gruppen_id))){
-            //Log.d("Response Delete: ", "> " + "OK1");
-            //if (!db.isOpen()) {
-                //Log.d("Response Delete: ", "> " + "DB close");
-            //}
-            db.execSQL("DELETE FROM gruppe WHERE _id = " + gruppen_id + " ");
+            db.execSQL("UPDATE gruppe SET status = 'd' WHERE _id = " + gruppen_id + " ");
+
+            //db.execSQL("DELETE FROM gruppe WHERE _id = " + gruppen_id + " ");
             zwisch = 1;
-            //Log.d("Response Delete: ", "> " + "OK");
-        }//else{
-            //Log.d("Response Delete: ", "> " + "ERROR");
-        //}
-        //Log.d("Response Delete: ", "> " + "finish");
+
+        }
         db.close();
 
         return zwisch;
@@ -170,13 +157,11 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         Integer user_id = -1;
 
-        Cursor c = db.rawQuery("SELECT user_id FROM gruppe  WHERE _id = " + gruppen_id + " ;", null);
+        Cursor c = db.rawQuery("SELECT user_id FROM gruppe  WHERE status != 'd' AND _id = " + gruppen_id + " ;", null);
 
 
         if(c.moveToFirst()){
-            //do{
                 user_id = c.getInt(0);
-            //}while(c.moveToNext());
         }
         c.close();
 
@@ -209,7 +194,7 @@ public class Data_Access extends SQLiteOpenHelper{
         Cursor c = db.rawQuery(
                 "SELECT sum(betrag) AS Summe " +
                         "FROM ausgabe " +
-                        "WHERE gruppe_id = " + gruppen_id + " " +
+                        "WHERE status != 'd' AND gruppe_id = " + gruppen_id + " " +
                         "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' " +
                         "GROUP BY gruppe_id ", null
         );
@@ -226,22 +211,11 @@ public class Data_Access extends SQLiteOpenHelper{
 
     public Float getUserGesamtbetrag(String startdatum, String enddatum, Integer gruppen_id, Integer user_id){
         SQLiteDatabase db = this.getWritableDatabase();
-/*
-        Cursor c = db.rawQuery(
-                "SELECT sum(ausgabe.betrag) AS Summe " +
-                        "FROM ausgabe " +
-                        "INNER JOIN user_ist_mitglied_in_gruppe " +
-                        "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
-                        "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
-                        "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
-                        "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' " +
-                        "GROUP BY user_ist_mitglied_in_gruppe.user_id ;", null
-        );
-*/
+
         Cursor c = db.rawQuery(
                 "SELECT sum(betrag) AS Summe " +
                         "FROM ausgabe " +
-                        "WHERE gruppe_id = " + gruppen_id + " " +
+                        "WHERE status != 'd' AND gruppe_id = " + gruppen_id + " " +
                         "AND user_id = " + user_id + " " +
                         "AND datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' " +
                         "GROUP BY user_id ;", null
@@ -260,29 +234,17 @@ public class Data_Access extends SQLiteOpenHelper{
     public List<Geldausgabe> getUserGeldausgaben(String startdatum, String enddatum, Integer gruppen_id, Integer user_id){
         List<Geldausgabe> Ausgaben = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
-/*
-        Cursor c = db.rawQuery(
-                "SELECT ausgabe.* " +
-                "FROM ausgabe " +
-                "INNER JOIN user_ist_mitglied_in_gruppe " +
-                        "ON ausgabe.gruppe_id = user_ist_mitglied_in_gruppe.gruppe_id  " +
-                "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppen_id + " " +
-                        "AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " " +
-                        "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null
-        );
-*/
 
         Cursor c = db.rawQuery(
                 "SELECT * " +
                         "FROM ausgabe " +
-                        "WHERE gruppe_id = " + gruppen_id + " " +
+                        "WHERE  status != 'd' AND gruppe_id = " + gruppen_id + " " +
                         "AND user_id = " + user_id + " " +
                         "AND ausgabe.datum BETWEEN '" + startdatum + "' AND '" + enddatum + "' ", null
         );
         if(c.moveToFirst()){
             do{
                 Ausgaben.add(new Geldausgabe(c.getInt(0), c.getString(1), c.getString(2), c.getFloat(3)));
-                //Log.d("ResponseGeld: ", "> " + c.getInt(0)+c.getString(1)+c.getString(2)+c.getFloat(3)+" grupe" + gruppen_id + " user:"+ user_id );
             }while(c.moveToNext());
         }
         c.close();
@@ -301,7 +263,7 @@ public class Data_Access extends SQLiteOpenHelper{
                         "FROM user " +
                         "INNER JOIN user_ist_mitglied_in_gruppe " +
                         "ON user._id = user_ist_mitglied_in_gruppe.user_id  " +
-                        "WHERE user_ist_mitglied_in_gruppe.gruppe_id = " + gruppe_id + " ", null
+                        "WHERE  user_ist_mitglied_in_gruppe.status != 'd' AND user_ist_mitglied_in_gruppe.gruppe_id = " + gruppe_id + " ", null
         );
 
         if(c.moveToFirst()){
@@ -320,7 +282,8 @@ public class Data_Access extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         Integer zwisch = -1;
         if(user_id.equals(getGruppenMasterID(gruppen_id))){
-            db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + mitglied_id + " AND gruppe_id = " + gruppen_id + " ");
+            db.execSQL("UPDATE user_ist_mitglied_in_gruppe SET status = 'd' WHERE user_id = " + mitglied_id + " AND gruppe_id = " + gruppen_id + " ");
+            //db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + mitglied_id + " AND gruppe_id = " + gruppen_id + " ");
             zwisch = 0;
         }
 
@@ -329,7 +292,6 @@ public class Data_Access extends SQLiteOpenHelper{
     }
 
     public void addGruppenMitglied(Integer gruppen_id, Integer mitglied_id){
-        //Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
 
         //datum TEXT as strings ("YYYY-MM-DD").
@@ -364,7 +326,6 @@ public class Data_Access extends SQLiteOpenHelper{
     }
 
     public Boolean existUserInGruppe(String email, Integer gruppen_id){
-        //zwisch = -10;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -374,13 +335,12 @@ public class Data_Access extends SQLiteOpenHelper{
                         "FROM user " +
                         "INNER JOIN user_ist_mitglied_in_gruppe " +
                         "ON user_ist_mitglied_in_gruppe.user_id = user._id " +
-                        "WHERE user.email = '" + email + "' " +
+                        "WHERE user_ist_mitglied_in_gruppe.status != 'd' AND user.email = '" + email + "' " +
                         "AND  user_ist_mitglied_in_gruppe.gruppe_id = '"+gruppen_id+"' ", null
         );
 
 
         if(c.moveToFirst()){
-            //id = c.getInt(0);
             c.close();
             return true;
 
@@ -394,12 +354,8 @@ public class Data_Access extends SQLiteOpenHelper{
 
     public String addGruppenMitglied(Integer gruppen_id, String email){
         Integer user_id = getLoginState();
-        //SQLiteDatabase db = this.getWritableDatabase();
 
-        //Log.d("Response1: ", "> " + existUser(email));
         if(existUser(email).equals(-10)) {
-            //Log.d("Response2: ", "> " + "add User" + email);
-            //addUser(email+" noSync",email,"00000");
             String url = "http://home.htw-berlin.de/~s0539589/Finanzplanung/usersearch.php";
 
             ServiceHandler sh = new ServiceHandler();
@@ -408,7 +364,6 @@ public class Data_Access extends SQLiteOpenHelper{
             List<NameValuePair> PHPanfrage = new ArrayList<>();
 
             PHPanfrage.add(new BasicNameValuePair("email", email));
-            //PHPanfrage.add(new BasicNameValuePair("gruppe", gruppen_id.toString()));
 
             String jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, PHPanfrage);
             sh.destroy();
@@ -423,11 +378,11 @@ public class Data_Access extends SQLiteOpenHelper{
 
 
                     if(jsonObj.getString("exception").equals("OK")) {
-                        Log.d("Responsess: ", "> " + "niceOK");
-                        Log.d("Response mID: ", "> " + jsonObj.getInt("_id"));
+                        //Log.d("Responsess: ", "> " + "niceOK");
+                        //Log.d("Response mID: ", "> " + jsonObj.getInt("_id"));
                         Integer mitglied_id = jsonObj.getInt("_id");
                         addUser(mitglied_id, jsonObj.getString("name"), jsonObj.getString("email"));
-                        Log.d("Response email: ", "> " + jsonObj.getString("email"));
+                        //Log.d("Response email: ", "> " + jsonObj.getString("email"));
                         addGruppenMitglied(gruppen_id, mitglied_id);
                         jsonStr = "OK";
 
@@ -442,12 +397,7 @@ public class Data_Access extends SQLiteOpenHelper{
                 }
 
             } else {
-                //Log.e("ServiceHandler", "Couldn't get any data from the url");
-
-
                 jsonStr = "ERROR: NO INTERNET CONNECTION";
-
-
             }
 
             return jsonStr;
@@ -455,16 +405,10 @@ public class Data_Access extends SQLiteOpenHelper{
         }else if(existUserInGruppe(email,gruppen_id)){
             return "user vorhanden";
         } else {
-            //Log.d("Response3: ", "> " + existUser(email));
             addGruppenMitglied(gruppen_id, existUser(email));
-            //Log.d("Response4: ", "> " + "nice");
             return "OK";
         }
 
-        /*
-
-        */
-        //db.close();
     }
 
     //Home
@@ -473,13 +417,12 @@ public class Data_Access extends SQLiteOpenHelper{
         ArrayList<Gruppe> Gruppen = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
 
-
         Cursor c = db.rawQuery(
                 "SELECT gruppe._id, gruppe.name " +
                         "FROM gruppe " +
                         "INNER JOIN user_ist_mitglied_in_gruppe " +
                         "ON gruppe._id = user_ist_mitglied_in_gruppe.gruppe_id   " +
-                        "WHERE user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null
+                        "WHERE user_ist_mitglied_in_gruppe.status != 'd' AND user_ist_mitglied_in_gruppe.user_id = " + user_id + " ", null
         );
 
 
@@ -496,17 +439,13 @@ public class Data_Access extends SQLiteOpenHelper{
 
     public void verlasseGruppe(Integer gruppen_id){
         Integer user_id = getLoginState();
-
         SQLiteDatabase db = this.getWritableDatabase();
-
-        db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppe_id = " + gruppen_id + " ");
-
+        db.execSQL("UPDATE user_ist_mitglied_in_gruppe SET status = 'd' WHERE user_id = " + user_id + " AND gruppe_id = " + gruppen_id + " ");
+        //db.execSQL("DELETE FROM user_ist_mitglied_in_gruppe WHERE user_id = " + user_id + " AND gruppe_id = " + gruppen_id + " ");
         db.close();
     }
 
     //Startseite
-
-
     public String Login(String email,String passwort){
             String url = "http://home.htw-berlin.de/~s0539589/Finanzplanung/login.php";
 
@@ -514,10 +453,8 @@ public class Data_Access extends SQLiteOpenHelper{
 
             // Making a request to url and getting response
             List<NameValuePair> PHPanfrage = new ArrayList<>();
-
             PHPanfrage.add(new BasicNameValuePair("email", email));
             PHPanfrage.add(new BasicNameValuePair("password", passwort));
-
             String jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, PHPanfrage);
 
             Log.d("Response: ", "> " + jsonStr);
@@ -527,8 +464,6 @@ public class Data_Access extends SQLiteOpenHelper{
                  try {
 
                     JSONObject jsonObj = new JSONObject(stripHtml(jsonStr));
-
-
 
                     if(jsonObj.getString("exception").equals("OK")) {
 
@@ -545,7 +480,6 @@ public class Data_Access extends SQLiteOpenHelper{
                     }else{
                         jsonStr = jsonObj.getString("exception");
                     }
-
 
                 } catch (JSONException e) {
                     jsonStr = "ERROR: ";
@@ -566,13 +500,12 @@ public class Data_Access extends SQLiteOpenHelper{
         return jsonStr;
     }
     public Boolean LoginLocal(String email, String passwort){
-        //Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
         Boolean zwisch = false;
         Cursor c = db.rawQuery(
                 "SELECT _id " +
                         "FROM user " +
-                        "WHERE email = " + email + " " +
+                        "WHERE AND email = " + email + " " +
                         "AND passwort = " + passwort + " ", null
         );
 
@@ -593,9 +526,7 @@ public class Data_Access extends SQLiteOpenHelper{
     }
     public Integer getLoginState(){
         Integer id = null;
-
         SQLiteDatabase db = this.getWritableDatabase();
-
 
             Cursor c = db.rawQuery(
                     "SELECT _id " +
@@ -603,19 +534,13 @@ public class Data_Access extends SQLiteOpenHelper{
                             "WHERE loginstatus = 1 ", null
             );
 
-
             if(c.moveToFirst()){
                 do{
                     id = c.getInt(0);
                 }while(c.moveToNext());
             }
             c.close();
-
-
         db.close();
-
-
-
         return id;
     }
 
@@ -627,9 +552,6 @@ public class Data_Access extends SQLiteOpenHelper{
                             "SET loginstatus = 0 " +
                             "WHERE loginstatus = 1 ;"
             );
-
-
-
         db.close();
     }
 
@@ -671,6 +593,7 @@ public class Data_Access extends SQLiteOpenHelper{
     {
         return html.substring(html.indexOf("{"), html.lastIndexOf("}") + 1);
     }
+
     public String stripHtmlForArray(String html)
     {
         return html.substring(html.indexOf("["), html.lastIndexOf("]") + 1);
@@ -702,30 +625,6 @@ public class Data_Access extends SQLiteOpenHelper{
 
                     jsonStr = jsonObj.getString("exception");
 
-/*
-                // Getting JSON Array node
-                contacts = jsonObj.getJSONArray(TAG_CONTACTS);
-
-                // looping through All Contacts
-                for (int i = 0; i < contacts.length(); i++) {
-                    JSONObject c = contacts.getJSONObject(i);
-
-                    String id = c.getString(TAG_ID);
-                    String name = c.getString(TAG_NAME);
-                    String email = c.getString(TAG_EMAIL);
-
-
-                    // tmp hashmap for single contact
-                    HashMap<String, String> contact = new HashMap<String, String>();
-
-                    // adding each child node to HashMap key => value
-                    contact.put(TAG_ID, id);
-                    contact.put(TAG_NAME, name);
-                    contact.put(TAG_EMAIL, email);
-
-                    // adding contact to contact list
-                    contactList.add(contact);
-          */
                 } catch (JSONException e) {
                     jsonStr = "ERROR: "+stripHtml(jsonStr);
                     e.printStackTrace();
@@ -882,9 +781,7 @@ public class Data_Access extends SQLiteOpenHelper{
         Integer user_id = getLoginState();
         SQLiteDatabase db = this.getWritableDatabase();
 
-        //if(validation(passwort)){
             db.execSQL("UPDATE settings SET mobile_sync = " + (mobileSync ? 1 : 0) + " WHERE user_id = " + user_id + ";");
-        //}
         db.close();
     }
     public Boolean getMobileSyncStatus(){
