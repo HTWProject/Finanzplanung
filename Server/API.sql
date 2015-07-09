@@ -64,6 +64,23 @@ BEGIN
 END//
 delimiter ;
 
+DROP PROCEDURE IF EXISTS s0539589.FINANZgetUser;
+delimiter //
+CREATE PROCEDURE s0539589.FINANZgetUser(IN $email VARCHAR(255))
+BEGIN
+	IF ($email NOT REGEXP '^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$' OR $email NOT LIKE '%_@_%._%') THEN
+		SELECT ("write email correct") AS exception;
+	ELSEIF EXISTS(SELECT * FROM user WHERE aktiviert = 1 AND email = $email) THEN
+		SELECT _id, name, email, ("OK") AS exception FROM user WHERE email = $email;
+	ELSEIF EXISTS(SELECT * FROM user WHERE aktiviert != 1 AND email = $email) THEN
+		SELECT ("Account noch nicht Activiert") AS exception;
+	ELSE 
+		SELECT ("User nicht vorhanden") AS exception;
+	END IF;
+	
+END//
+delimiter ;
+
 
 
 DROP PROCEDURE IF EXISTS s0539589.FINANZgetPasswort;
