@@ -1,6 +1,5 @@
 package com.htw.finanzplanung;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -83,7 +82,7 @@ public class ActivitySettings extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_activity_settings, menu);
-        return true;
+        return false;
     }
 
     @Override

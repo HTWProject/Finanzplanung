@@ -1,8 +1,6 @@
 package com.htw.finanzplanung;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -91,7 +89,7 @@ public class ActivityGruppenmitglieder extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_activity_gruppenmitglieder, menu);
-        return true;
+        return false;
     }
 
     @Override
