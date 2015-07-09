@@ -69,7 +69,9 @@ public class ActivityGruppenmitglieder extends AppCompatActivity {
                     if(resultatAddMitglied.equals("OK")){
                         inputMitglied.getText().clear();
                         meineMitglieder = dataAccess.getGruppenMitglieder(gruppenID);
-                        thadapter.arr.add(meineMitglieder.get(meineMitglieder.size()-1));
+                        thadapter.arr.clear();
+                        thadapter.arr.addAll(meineMitglieder );
+                        //thadapter.arr.add(meineMitglieder.get(meineMitglieder.size()-1));
                         thadapter.notifyDataSetChanged();
                         Toast.makeText(getApplicationContext(), resultatAddMitglied , Toast.LENGTH_SHORT).show();
                     }else{

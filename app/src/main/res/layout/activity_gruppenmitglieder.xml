@@ -24,6 +24,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/mitgliederEmail"
                 android:inputType="textEmailAddress"
+                android:hint="email"
+                android:textColorHint="#808080"
                 android:layout_weight="0.81"
                 android:backgroundTint="#808080"
                 android:textColor="#808080"/>

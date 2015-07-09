@@ -25,6 +25,8 @@
                 android:id="@+id/gruppenname"
                 android:layout_weight="0.81"
                 android:inputType="text"
+                android:hint="gruppenname"
+                android:textColorHint="#808080"
                 android:backgroundTint="#808080"
                 android:textColor="#808080"/>
 

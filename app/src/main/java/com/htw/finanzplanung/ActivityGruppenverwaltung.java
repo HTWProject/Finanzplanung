@@ -69,7 +69,10 @@ public class ActivityGruppenverwaltung extends AppCompatActivity {
                     dataAccess.addGruppe(inputGruppenName.getText().toString());
                     inputGruppenName.getText().clear();
                     meineGruppen = dataAccess.getMeineGruppen();
-                    thadapter.arr.add(meineGruppen.get(meineGruppen.size()-1));
+
+                    thadapter.arr.clear();
+                    thadapter.arr.addAll(meineGruppen);
+                    //thadapter.arr.add(meineGruppen.get(meineGruppen.size()-1));
                     thadapter.notifyDataSetChanged();
                     Toast.makeText(ActivityGruppenverwaltung.this, "Item added", Toast.LENGTH_SHORT).show();
                 }

@@ -50,7 +50,8 @@ public class Data_Access extends SQLiteOpenHelper{
                         "  name TEXT," +
                         "  email TEXT UNIQUE," +
                         "  passwort TEXT NOT NULL," +
-                        "  loginstatus INTEGER DEFAULT 1" +
+                        "  loginstatus INTEGER DEFAULT 1 , " +
+                        "  status TEXT " +
                         ")"
         );
 
@@ -59,7 +60,8 @@ public class Data_Access extends SQLiteOpenHelper{
                         "(" +
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "  name TEXT," +
-                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE" +
+                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE  , " +
+                        "  status TEXT " +
                         ")"
         );
 
@@ -68,7 +70,8 @@ public class Data_Access extends SQLiteOpenHelper{
                         "  _id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "  server TEXT DEFAULT 'http://fomenko.eu/Finanzplanung/'," +
                         "  mobile_sync INTEGER DEFAULT 0," +
-                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE" +
+                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE , " +
+                        "  status TEXT " +
                         ")"
         );
 
@@ -78,15 +81,17 @@ public class Data_Access extends SQLiteOpenHelper{
                         "  datum TEXT," +
                         "  was TEXT," +
                         "  betrag REAL," +
-                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
-                        "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE" +
+                        "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE, " +
+                        "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE , " +
+                        "  status TEXT " +
                         ")"
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS user_ist_mitglied_in_gruppe " +
                         "(" +
                         "  user_id INTEGER REFERENCES user(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
-                        "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE," +
+                        "  gruppe_id INTEGER REFERENCES gruppe(_id) ON UPDATE CASCADE ON DELETE CASCADE, " +
+                        "  status TEXT, " +
                         "  PRIMARY KEY(user_id,gruppe_id) " +
                         ")"
         );
@@ -391,70 +396,73 @@ public class Data_Access extends SQLiteOpenHelper{
         Integer user_id = getLoginState();
         //SQLiteDatabase db = this.getWritableDatabase();
 
-        Log.d("Response1: ", "> " + existUser(email));
+        //Log.d("Response1: ", "> " + existUser(email));
         if(existUser(email).equals(-10)) {
-            Log.d("Response2: ", "> " + "add User" + email);
+            //Log.d("Response2: ", "> " + "add User" + email);
             //addUser(email+" noSync",email,"00000");
-            return "user existiert nicht";
+            String url = "http://home.htw-berlin.de/~s0539589/Finanzplanung/usersearch.php";
+
+            ServiceHandler sh = new ServiceHandler();
+
+            // Making a request to url and getting response
+            List<NameValuePair> PHPanfrage = new ArrayList<>();
+
+            PHPanfrage.add(new BasicNameValuePair("email", email));
+            //PHPanfrage.add(new BasicNameValuePair("gruppe", gruppen_id.toString()));
+
+            String jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, PHPanfrage);
+            sh.destroy();
+            Log.d("Responsess: ", "> " + jsonStr);
+
+
+            if (jsonStr != null) {
+                try {
+                    Log.d("Responsess: ", "> " + "nice");
+                    JSONObject jsonObj = new JSONObject(stripHtml(jsonStr));
+                    Log.d("Responsess: ", "> " + "nice2");
+
+
+                    if(jsonObj.getString("exception").equals("OK")) {
+                        Log.d("Responsess: ", "> " + "niceOK");
+                        Log.d("Response mID: ", "> " + jsonObj.getInt("_id"));
+                        Integer mitglied_id = jsonObj.getInt("_id");
+                        addUser(mitglied_id, jsonObj.getString("name"), jsonObj.getString("email"));
+                        Log.d("Response email: ", "> " + jsonObj.getString("email"));
+                        addGruppenMitglied(gruppen_id, mitglied_id);
+                        jsonStr = "OK";
+
+                    }else{
+                        jsonStr = jsonObj.getString("exception");
+                    }
+
+
+                } catch (JSONException e) {
+                    jsonStr = "ERROR: ";
+                    e.printStackTrace();
+                }
+
+            } else {
+                //Log.e("ServiceHandler", "Couldn't get any data from the url");
+
+
+                jsonStr = "ERROR: NO INTERNET CONNECTION";
+
+
+            }
+
+            return jsonStr;
+            //return "user existiert nicht";
         }else if(existUserInGruppe(email,gruppen_id)){
             return "user vorhanden";
         } else {
-            Log.d("Response3: ", "> " + existUser(email));
+            //Log.d("Response3: ", "> " + existUser(email));
             addGruppenMitglied(gruppen_id, existUser(email));
-            Log.d("Response4: ", "> " + "nice");
+            //Log.d("Response4: ", "> " + "nice");
             return "OK";
         }
 
         /*
-        String url = "http://home.htw-berlin.de/~s0539589/Finanzplanung/usersearch.php";
 
-        ServiceHandler sh = new ServiceHandler();
-
-        // Making a request to url and getting response
-        List<NameValuePair> PHPanfrage = new ArrayList<>();
-
-        PHPanfrage.add(new BasicNameValuePair("email", email));
-        //PHPanfrage.add(new BasicNameValuePair("gruppe", gruppen_id.toString()));
-
-        String jsonStr = sh.makeServiceCall(url, ServiceHandler.POST, PHPanfrage);
-
-        Log.d("Response: ", "> " + jsonStr);
-
-
-        if (jsonStr != null) {
-            try {
-
-                JSONObject jsonObj = new JSONObject(stripHtml(jsonStr));
-
-
-
-                if(jsonObj.getString("exception").equals("OK")) {
-
-                    Integer mitglied_id = jsonObj.getInt("_id");
-
-                    addUser(mitglied_id, jsonObj.getString("name"), jsonObj.getString("email"), "wirste nie erraten");
-
-                    addGruppenMitglied(gruppen_id, mitglied_id);
-
-                }else{
-                    jsonStr = jsonObj.getString("exception");
-                }
-
-
-            } catch (JSONException e) {
-                jsonStr = "ERROR: ";
-                e.printStackTrace();
-            }
-
-        } else {
-            Log.e("ServiceHandler", "Couldn't get any data from the url");
-
-
-            jsonStr = "ERROR: NO INTERNET CONNECTION";
-
-
-        }
-        sh.destroy();
         */
         //db.close();
     }
@@ -753,15 +761,16 @@ public class Data_Access extends SQLiteOpenHelper{
         return 0;
     }
 
-    public int addUser(String name, String email, String passwort){
+    public int addUser(Integer mitglied_id, String name, String email){
         SQLiteDatabase db = this.getWritableDatabase();
 
         //datum TEXT as strings ("YYYY-MM-DD").
-        db.execSQL("INSERT INTO user (name, email, passwort, loginstatus) " +
+        db.execSQL("INSERT INTO user (_id, name, email, passwort, loginstatus) " +
                 "VALUES (" +
+                " '" + mitglied_id + "', " +
                 " '" + name + "', " +
                 " '" + email + "', " +
-                " '" + passwort + "', " +
+                " '00000', " +
                 " 0 " +
                 ");");
 
