@@ -46,15 +46,15 @@
         <task id="6" name="Testen(Implementierung)" color="#8cb6ce" meeting="false" start="2015-05-18" duration="1" complete="0" expand="true"/>
         <task id="7" name="PHP  Pharser" color="#8cb6ce" meeting="false" start="2015-05-21" duration="32" complete="0" expand="true"/>
         <task id="8" name="MySQL Datenbank" color="#8cb6ce" meeting="false" start="2015-05-21" duration="32" complete="0" expand="true"/>
-        <task id="9" name="Android App Classen" color="#8cb6ce" meeting="false" start="2015-05-12" duration="39" complete="0" expand="true">
+        <task id="9" name="Android App Classen" color="#8cb6ce" meeting="false" start="2015-06-05" duration="23" complete="0" expand="true">
             <task id="10" name="Algorithmus" color="#8cb6ce" meeting="false" start="2015-06-05" duration="21" complete="0" expand="true"/>
             <task id="11" name="JSON schnittstelle(classe)" color="#8cb6ce" meeting="false" start="2015-06-08" duration="15" complete="0" expand="true"/>
-            <task id="12" name="Test Classe" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
-            <task id="13" name="GUI (Spinner)" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
-            <task id="14" name="Vorgang_14" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
+            <task id="12" name="Test Classe" color="#8cb6ce" meeting="false" start="2015-06-11" duration="19" complete="0" expand="true"/>
+            <task id="13" name="GUI" color="#8cb6ce" meeting="false" start="2015-06-12" duration="18" complete="0" expand="true"/>
+            <task id="14" name="Vorgang_14" color="#8cb6ce" meeting="false" start="2015-06-12" duration="18" complete="0" expand="true"/>
         </task>
-        <task id="16" name="Marketing" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
-        <task id="17" name="Informelle Statment Specis Inception" color="#8cb6ce" meeting="false" start="2015-05-12" duration="1" complete="0" expand="true"/>
+        <task id="16" name="Marketing" color="#8cb6ce" meeting="false" start="2015-06-12" duration="18" complete="0" expand="true"/>
+        <task id="17" name="Informelle Statment Specis Inception" color="#8cb6ce" meeting="false" start="2015-05-28" duration="29" complete="0" expand="true"/>
         <task id="18" name="Presentation" color="#8cb6ce" meeting="false" start="2015-07-13" duration="1" complete="0" expand="true"/>
     </tasks>
     <resources/>
