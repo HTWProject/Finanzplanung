@@ -31,7 +31,7 @@ public class Data_Access extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, 1);
     }
 
-    public void databasefghfg(Context context){
+    public void databaseDelete(Context context){
         context.deleteDatabase(DATABASE_NAME);
     }
 
